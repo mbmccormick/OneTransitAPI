@@ -80,7 +80,6 @@
     <Compile Include="TransitService.svc.cs">
       <DependentUpon>TransitService.svc</DependentUpon>
     </Compile>
-    <Compile Include="ITransitService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transit\BART.cs" />
     <Compile Include="Transit\CityBus.cs" />

@@ -13,7 +13,7 @@ namespace OneTransitAPI.Transit
     {
         public WMATA(Agency transitAgency) : base(transitAgency)
         {
-            this.APIKey = ConfigurationManager.AppSettings["WMATAKey"];
+            this.APIKey = "sr3rfhh9347x4tvgsvaaxakn";
         }
 
         public override List<Stop> GetStopsByLocation(double latitude, double longitude, double radius)

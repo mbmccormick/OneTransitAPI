@@ -13,7 +13,7 @@ namespace OneTransitAPI.Transit
     {
         public Seattle(Agency transitAgency) : base(transitAgency)
         {
-            this.APIKey = ConfigurationManager.AppSettings["SeattleKey"];
+            this.APIKey = "0e182a1e-2d1f-49df-b4dd-c3fe09929d98";
         }
 
         public override List<Stop> GetStopsByLocation(double latitude, double longitude, double radius)

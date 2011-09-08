@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.ServiceModel.Activation;
 using System.Configuration;
 using OneTransitAPI.Data;
 using OneTransitAPI.Transit;
@@ -12,20 +13,28 @@ using OneTransitAPI.Transit.Common;
 
 namespace OneTransitAPI
 {
-    public class TransitService : ITransitService
+    [ServiceContract]
+    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+    public partial class TransitService
     {
+        [OperationContract]
+        [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, ResponseFormat = WebMessageFormat.Json, UriTemplate = "agencies/getList")]
         public List<Agency> GetTransitAgencies()
         {
             DatabaseDataContext db = new DatabaseDataContext();
             return db.Agencies.ToList<Agency>();
         }
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, ResponseFormat = WebMessageFormat.Json, UriTemplate = "stops/getListByLocation?agency={agencyid}&lat={latitude}&lon={longitude}&radius={radius}")]
         public List<Stop> GetStopsByLocation(string agencyid, double latitude, double longitude, double radius)
         {
             IWebService webService = SelectWebService(agencyid);
             return webService.GetStopsByLocation(latitude, longitude, radius);
         }
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, ResponseFormat = WebMessageFormat.Json, UriTemplate = "stops/getTimes?agency={agencyid}&stop={stopid}")]
         public List<StopTime> GetStopTimes(string agencyid, string stopid)
         {
             IWebService webService = SelectWebService(agencyid);

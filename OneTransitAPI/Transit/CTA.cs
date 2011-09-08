@@ -13,7 +13,7 @@ namespace OneTransitAPI.Transit
     {
         public CTA(Agency transitAgency) : base(transitAgency)
         {
-            this.APIKey = ConfigurationManager.AppSettings["CTAKey"];
+            this.APIKey = "jGijvDCQLFimphXidZxyJ8UPL";
         }
 
         public override List<Stop> GetStopsByLocation(double latitude, double longitude, double radius)

@@ -13,7 +13,7 @@ namespace OneTransitAPI.Transit
     {
         public BART(Agency transitAgency) : base(transitAgency)
         {
-            this.APIKey = ConfigurationManager.AppSettings["BARTKey"];
+            this.APIKey = "ETDH-BAEA-Y9UQ-9TXU";
         }
         
         public override List<Stop> GetStopsByLocation(double latitude, double longitude, double radius)
