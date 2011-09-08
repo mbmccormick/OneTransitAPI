@@ -86,7 +86,7 @@
     <Compile Include="Transit\Common\Utilities.cs" />
     <Compile Include="Transit\CTA.cs" />
     <Compile Include="Transit\Common\GTFS.cs" />
-    <Compile Include="Transit\RouteShout.cs" />
+    <Compile Include="Transit\Common\RouteShout.cs" />
     <Compile Include="Transit\Seattle.cs" />
     <Compile Include="Transit\WMATA.cs" />
     <Compile Include="Transit\Common\IWebService.cs" />

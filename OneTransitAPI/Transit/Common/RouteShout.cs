@@ -7,7 +7,7 @@ using System.Configuration;
 using OneTransitAPI.Data;
 using OneTransitAPI.Transit.Common;
 
-namespace OneTransitAPI.Transit
+namespace OneTransitAPI.Transit.Common
 {
     public class RouteShout : IWebService 
     {
