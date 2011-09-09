@@ -1,0 +1,75 @@
+﻿body
+{
+    font-family: Arial;
+    font-size: 16px;
+    color: #222222;
+    text-shadow: rgba(0, 0, 0, 0.0078125) 0px 0px 1px;
+    line-height: 1.7em;
+    padding: 50px 60px;
+}
+
+a
+{
+    color: #73db37;
+}
+
+#page
+{
+    width: 500px;
+    margin: 0px auto;
+    background-color: #eeeeee;
+    padding: 40px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    -moz-box-shadow: 5px 5px 5px #aaaaaa;
+    -webkit-box-shadow: 0px 2px 5px #aaaaaa;
+    box-shadow: 5px 5px 5px #aaaaaa;
+}
+
+#header
+{
+    padding: 10px 0px;
+}
+
+#header h1
+{
+    font-size: 36px;
+    font-weight: bold;
+    padding: 0px;
+    margin: 0px;
+}
+
+#header h1 a
+{
+    text-decoration: none;
+    background-color: #73db37;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+#header p
+{
+    font-weight: bold;
+}
+
+#footer
+{
+    color: #999;
+    font-size: 18px;
+    padding: 30px 0 0 0;
+}
+
+.documentation .method
+{
+    padding-bottom: 20px;
+}
+
+.documentation .method b
+{
+    font-weight: normal;
+    font-family: Courier New;
+    font-size: 14px;
+}

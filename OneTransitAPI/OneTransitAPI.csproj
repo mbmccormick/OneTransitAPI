@@ -57,6 +57,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Default.aspx" />
+    <Content Include="StyleSheet.css" />
     <Content Include="TransitService.svc" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -80,6 +82,13 @@
     </Compile>
     <Compile Include="Data\Stop.cs" />
     <Compile Include="Data\StopTime.cs" />
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
     <Compile Include="TransitService.svc.cs">
       <DependentUpon>TransitService.svc</DependentUpon>
     </Compile>
