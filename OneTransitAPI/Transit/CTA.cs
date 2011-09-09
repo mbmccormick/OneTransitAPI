@@ -16,6 +16,22 @@ namespace OneTransitAPI.Transit
             this.APIKey = "jGijvDCQLFimphXidZxyJ8UPL";
         }
 
+        public override List<Route> GetRoutes()
+        {
+            GTFS engine = new GTFS(this.TransitAgency);
+            List<Route> result = engine.GetRoutes();
+
+            return result;
+        }
+
+        public override Stop GetStop(string stopid)
+        {
+            GTFS engine = new GTFS(this.TransitAgency);
+            Stop result = engine.GetStop(stopid);
+
+            return result;
+        }
+
         public override List<Stop> GetStopsByLocation(double latitude, double longitude, double radius)
         {
             GTFS engine = new GTFS(this.TransitAgency);
@@ -43,7 +59,7 @@ namespace OneTransitAPI.Transit
                 StopTime t = new StopTime();
                 t.RouteShortName = r["rt"].ToString();
                 t.RouteLongName = r["rt"].ToString();
-                t.ArrivalTime = DateTime.ParseExact(r["prdtm"].ToString(), "yyyyMMdd HH:mm", new System.Globalization.CultureInfo("en-US")).TimeOfDay;
+                t.ArrivalTime = DateTime.ParseExact(r["prdtm"].ToString(), "yyyyMMdd HH:mm", new System.Globalization.CultureInfo("en-US"));
                 t.DepartureTime = t.ArrivalTime;
                 t.Type = 1;
 

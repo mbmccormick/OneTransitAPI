@@ -19,6 +19,41 @@ namespace OneTransitAPI.Transit.Common
 
         public GTFS(Agency transitAgency) : base(transitAgency) { }
 
+        public override List<Route> GetRoutes()
+        {
+            Routes = ImportGTFS(TransitAgency.AgencyID, "routes.txt").AsEnumerable();
+
+            List<Route> result = new List<Route>();
+
+            foreach (var r in Routes)
+            {
+                Route rt = new Route();
+                rt.ID = r.Field<string>("route_id");
+                rt.ShortName = r.Field<string>("route_short_name");
+                rt.LongName = r.Field<string>("route_long_name");
+
+                result.Add(rt);
+            }
+
+            return result;
+        }
+
+        public override Stop GetStop(string stopid)
+        {
+            Stops = ImportGTFS(TransitAgency.AgencyID, "stops.txt").AsEnumerable();
+
+            var r = (from s in Stops where s.Field<string>("stop_id").ToUpper() == stopid select s).Single();
+
+            Stop result = new Stop();
+            result.ID = r.Field<string>("stop_id");
+            result.Name = r.Field<string>("stop_name");
+            result.Code = r.Field<string>("stop_code");
+            result.Latitude = r.Field<double>("stop_lat");
+            result.Longitude = r.Field<double>("stop_lon");
+
+            return result;
+        }
+
         public override List<Stop> GetStopsByLocation(double latitude, double longitude, double radius)
         {
             Stops = ImportGTFS(TransitAgency.AgencyID, "stops.txt").AsEnumerable();
@@ -52,25 +87,21 @@ namespace OneTransitAPI.Transit.Common
 
             List<StopTime> result = new List<StopTime>();
 
-            var now = DateTime.UtcNow;
-            var tod0 = now.AddHours(-TransitAgency.TimeZone).TimeOfDay;
-            var tod1 = now.AddHours(-TransitAgency.TimeZone).AddHours(2).TimeOfDay;
+            var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
+            var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc)).ToLocalTime();
 
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["IsDaylightSavingsTime"]) == true)
-            {
-                tod0 = tod0.Add(new TimeSpan(1, 0, 0));
-                tod1 = tod1.Add(new TimeSpan(1, 0, 0));
-            }
+            var tod0 = now.TimeOfDay;
+            var tod1 = now.AddHours(2).TimeOfDay;
 
             var sts =
                 from st in StopTimes
                 let StopID = st.Field<string>("stop_id")
                 where StopID == stopID
                 where st["departure_time"].ToString() != ""
-                let DepartureTime = st.Field<DateTime>("departure_time").TimeOfDay
-                let ArrivalTime = st.Field<DateTime>("arrival_time").TimeOfDay
-                where DepartureTime >= tod0
-                where DepartureTime < tod1
+                let DepartureTime = st.Field<DateTime>("departure_time")
+                let ArrivalTime = st.Field<DateTime>("arrival_time")
+                where DepartureTime.TimeOfDay >= tod0
+                where DepartureTime.TimeOfDay < tod1
                 let TripID = st.Field<string>("trip_id")
                 select new
                 {

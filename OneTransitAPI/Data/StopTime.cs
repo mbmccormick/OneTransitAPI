@@ -9,8 +9,8 @@ namespace OneTransitAPI.Data
     {
         public string RouteShortName;
         public string RouteLongName;
-        public TimeSpan ArrivalTime;
-        public TimeSpan DepartureTime;
+        public DateTime ArrivalTime;
+        public DateTime DepartureTime;
         public int Type;
 
         public StopTime() { }

@@ -13,7 +13,22 @@ namespace OneTransitAPI.Transit
     {
         public CityBus(Agency transitAgency) : base(transitAgency)
         {
-            this.APIKey = ConfigurationManager.AppSettings["RouteShoutKey"];
+        }
+
+        public override List<Route> GetRoutes()
+        {
+            GTFS engine = new GTFS(this.TransitAgency);
+            List<Route> result = engine.GetRoutes();
+
+            return result;
+        }
+
+        public override Stop GetStop(string stopid)
+        {
+            GTFS engine = new GTFS(this.TransitAgency);
+            Stop result = engine.GetStop(stopid);
+
+            return result;
         }
 
         public override List<Stop> GetStopsByLocation(double latitude, double longitude, double radius)
@@ -53,20 +68,20 @@ namespace OneTransitAPI.Transit
             foreach (DataRow r in ds.Tables["Bus"].Rows)
             {
                 StopTime t = new StopTime();
+                
                 t.RouteShortName = r["RouteName"].ToString().Substring(0, r["RouteName"].ToString().IndexOf(" ")).ToUpper().Trim(); if (t.RouteShortName.Length > 3) t.RouteShortName = t.RouteShortName.Substring(0, 3);
                 t.RouteLongName = r["RouteName"].ToString().Replace(t.RouteShortName, "").Trim();
+
+                var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
+                var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc)).ToLocalTime();
+                                
                 if (r["TimeTillArrival"].ToString() == "DUE")
-                    t.ArrivalTime = DateTime.UtcNow.AddHours(-this.TransitAgency.TimeZone).TimeOfDay;
+                    t.ArrivalTime = now.DateTime;
                 else
-                    t.ArrivalTime = DateTime.UtcNow.AddHours(-this.TransitAgency.TimeZone).AddMinutes(Convert.ToInt32(r["TimeTillArrival"].ToString().Replace("min", "").Trim())).TimeOfDay;
+                    t.ArrivalTime = now.AddMinutes(Convert.ToInt32(r["TimeTillArrival"].ToString().Replace("min", "").Trim())).DateTime;
+                
                 t.DepartureTime = t.ArrivalTime;
                 t.Type = 1;
-
-                if (Convert.ToBoolean(ConfigurationManager.AppSettings["IsDaylightSavingsTime"]) == true)
-                {
-                    t.ArrivalTime = t.ArrivalTime.Add(new TimeSpan(1, 0, 0));
-                    t.DepartureTime = t.DepartureTime.Add(new TimeSpan(1, 0, 0));
-                }
 
                 if ((from x in result where x.RouteShortName == t.RouteShortName select x).Count() < 2)
                     result.Add(t);

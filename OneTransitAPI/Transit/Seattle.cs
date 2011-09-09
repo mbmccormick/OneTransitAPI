@@ -16,6 +16,22 @@ namespace OneTransitAPI.Transit
             this.APIKey = "0e182a1e-2d1f-49df-b4dd-c3fe09929d98";
         }
 
+        public override List<Route> GetRoutes()
+        {
+            GTFS engine = new GTFS(this.TransitAgency);
+            List<Route> result = engine.GetRoutes();
+
+            return result;
+        }
+
+        public override Stop GetStop(string stopid)
+        {
+            GTFS engine = new GTFS(this.TransitAgency);
+            Stop result = engine.GetStop(stopid);
+
+            return result;
+        }
+
         public override List<Stop> GetStopsByLocation(double latitude, double longitude, double radius)
         {
             System.Net.WebClient client = new System.Net.WebClient();
@@ -54,18 +70,21 @@ namespace OneTransitAPI.Transit
                 t.RouteLongName = r.routeLongName;
                 if (r.predicted.ToString().ToLower() == "true")
                 {
-                    t.ArrivalTime = Utilities.ConvertFromUnixTime(this.TransitAgency.TimeZone, r.predictedArrivalTime.ToString()).TimeOfDay;
-                    t.DepartureTime = Utilities.ConvertFromUnixTime(this.TransitAgency.TimeZone, r.predictedDepartureTime.ToString()).TimeOfDay;
+                    t.ArrivalTime = Utilities.ConvertFromUnixTime(Convert.ToInt32(this.TransitAgency.TimeZone), r.predictedArrivalTime.ToString()).TimeOfDay;
+                    t.DepartureTime = Utilities.ConvertFromUnixTime(Convert.ToInt32(this.TransitAgency.TimeZone), r.predictedDepartureTime.ToString()).TimeOfDay;
                     t.Type = 1;
                 }
                 else
                 {
-                    t.ArrivalTime = Utilities.ConvertFromUnixTime(this.TransitAgency.TimeZone, r.scheduledArrivalTime.ToString()).TimeOfDay;
-                    t.DepartureTime = Utilities.ConvertFromUnixTime(this.TransitAgency.TimeZone, r.scheduledDepartureTime.ToString()).TimeOfDay;
+                    t.ArrivalTime = Utilities.ConvertFromUnixTime(Convert.ToInt32(this.TransitAgency.TimeZone), r.scheduledArrivalTime.ToString()).TimeOfDay;
+                    t.DepartureTime = Utilities.ConvertFromUnixTime(Convert.ToInt32(this.TransitAgency.TimeZone), r.scheduledDepartureTime.ToString()).TimeOfDay;
                     t.Type = 0;
                 }
 
-                if (Convert.ToBoolean(ConfigurationManager.AppSettings["IsDaylightSavingsTime"]) == true)
+                var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
+                var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc)).ToLocalTime();
+                                 
+                if (this.TransitAgency.FriendlyTimeZone.IsDaylightSavingTime(now) == true)
                 {
                     t.ArrivalTime = t.ArrivalTime.Add(new TimeSpan(1, 0, 0));
                     t.DepartureTime = t.DepartureTime.Add(new TimeSpan(1, 0, 0));

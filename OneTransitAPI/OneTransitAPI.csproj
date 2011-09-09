@@ -67,6 +67,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Utilities.cs" />
+    <Compile Include="Data\Agency.cs" />
+    <Compile Include="Data\Route.cs" />
     <Compile Include="Data\Database.cs">
       <DependentUpon>Database.dbml</DependentUpon>
     </Compile>

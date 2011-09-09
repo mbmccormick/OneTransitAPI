@@ -18,6 +18,10 @@ namespace OneTransitAPI.Transit.Common
             this.TransitAgency = transitAgency;
         }
 
+        public abstract List<Route> GetRoutes();
+
+        public abstract Stop GetStop(string stopid);
+        
         public abstract List<Stop> GetStopsByLocation(double latitude, double longitude, double radius);
 
         public abstract List<StopTime> GetStopTimes(string stopid);

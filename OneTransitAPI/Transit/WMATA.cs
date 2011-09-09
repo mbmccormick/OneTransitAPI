@@ -16,6 +16,22 @@ namespace OneTransitAPI.Transit
             this.APIKey = "sr3rfhh9347x4tvgsvaaxakn";
         }
 
+        public override List<Route> GetRoutes()
+        {
+            GTFS engine = new GTFS(this.TransitAgency);
+            List<Route> result = engine.GetRoutes();
+
+            return result;
+        }
+
+        public override Stop GetStop(string stopid)
+        {
+            GTFS engine = new GTFS(this.TransitAgency);
+            Stop result = engine.GetStop(stopid);
+
+            return result;
+        }
+
         public override List<Stop> GetStopsByLocation(double latitude, double longitude, double radius)
         {
             System.Net.WebClient client = new System.Net.WebClient();
@@ -81,21 +97,21 @@ namespace OneTransitAPI.Transit
                     if (r.Min != "")
                     {
                         StopTime t = new StopTime();
+
                         t.RouteShortName = r.Line;
                         t.RouteLongName = r.Line;
+
+                        var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
+                        var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc)).ToLocalTime();
+
                         if (r.Min.ToString() == "ARR" ||
                             r.Min.ToString() == "BRD")
-                            t.ArrivalTime = DateTime.UtcNow.AddHours(-this.TransitAgency.TimeZone).TimeOfDay;
+                            t.ArrivalTime = now.DateTime;
                         else
-                            t.ArrivalTime = DateTime.UtcNow.AddHours(-this.TransitAgency.TimeZone).AddMinutes(Convert.ToInt32(r.Min.ToString())).TimeOfDay;
+                            t.ArrivalTime = now.AddMinutes(Convert.ToInt32(r.Min.ToString())).DateTime;
+                        
                         t.DepartureTime = t.ArrivalTime;
                         t.Type = 1;
-
-                        if (Convert.ToBoolean(ConfigurationManager.AppSettings["IsDaylightSavingsTime"]) == true)
-                        {
-                            t.ArrivalTime = t.ArrivalTime.Add(new TimeSpan(1, 0, 0));
-                            t.DepartureTime = t.DepartureTime.Add(new TimeSpan(1, 0, 0));
-                        }
 
                         if ((from x in result where x.RouteShortName == t.RouteShortName select x).Count() < 2)
                             result.Add(t);

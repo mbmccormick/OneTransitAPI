@@ -26,6 +26,22 @@ namespace OneTransitAPI
         }
 
         [OperationContract]
+        [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, ResponseFormat = WebMessageFormat.Json, UriTemplate = "routes/getList?agency={agencyid}")]
+        public List<Route> GetRoutes(string agencyid)
+        {
+            IWebService webService = SelectWebService(agencyid);
+            return webService.GetRoutes();
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, ResponseFormat = WebMessageFormat.Json, UriTemplate = "stops/getInfo?agency={agencyid}&stop={stopid}")]
+        public Stop GetStop(string agencyid, string stopid)
+        {
+            IWebService webService = SelectWebService(agencyid);
+            return webService.GetStop(stopid);
+        }
+
+        [OperationContract]
         [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, ResponseFormat = WebMessageFormat.Json, UriTemplate = "stops/getListByLocation?agency={agencyid}&lat={latitude}&lon={longitude}&radius={radius}")]
         public List<Stop> GetStopsByLocation(string agencyid, double latitude, double longitude, double radius)
         {

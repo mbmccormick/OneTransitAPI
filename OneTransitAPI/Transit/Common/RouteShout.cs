@@ -16,6 +16,44 @@ namespace OneTransitAPI.Transit.Common
             this.APIKey = "97027712b04709de2958f77edcc25f1d";
         }
 
+        public override List<Route> GetRoutes()
+        {
+            System.Net.WebClient client = new System.Net.WebClient();
+            var jsonResult = client.DownloadString("http://api.routeshout.com/v1/rs.routes.getList?key=" + APIKey + "&agency=" + this.TransitAgency.AgencyID);
+
+            List<Route> result = new List<Route>();
+
+            foreach (var r in Json.Decode(jsonResult).response)
+            {
+                Route rt = new Route();
+                rt.ID = r.id;
+                rt.ShortName = r.short_name;
+                rt.LongName = r.long_name;
+
+                result.Add(rt);
+            }
+
+            return result;
+        }
+
+        public override Stop GetStop(string stopid)
+        {
+            System.Net.WebClient client = new System.Net.WebClient();
+            var jsonResult = client.DownloadString("http://api.routeshout.com/v1/rs.stops.getInfo?key=" + APIKey + "&agency=" + this.TransitAgency.AgencyID + "&stop=" + stopid);
+
+            var r = Json.Decode(jsonResult).response;
+
+            Stop result = new Stop();
+
+            result.ID = r.id;
+            result.Name = r.name;
+            result.Code = r.code;
+            result.Latitude = r.lat;
+            result.Longitude = r.lon;
+
+            return result;
+        }
+
         public override List<Stop> GetStopsByLocation(double latitude, double longitude, double radius)
         {
             System.Net.WebClient client = new System.Net.WebClient();
