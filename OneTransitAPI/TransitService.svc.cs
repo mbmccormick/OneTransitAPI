@@ -19,10 +19,10 @@ namespace OneTransitAPI
     {
         [OperationContract]
         [WebInvoke(Method = "GET", BodyStyle = WebMessageBodyStyle.Wrapped, ResponseFormat = WebMessageFormat.Json, UriTemplate = "agencies/getList")]
-        public List<Agency> GetTransitAgencies()
+        public List<Agency> GetAgencies()
         {
             DatabaseDataContext db = new DatabaseDataContext();
-            return db.Agencies.ToList<Agency>();
+            return db.Agencies.OrderBy(a => a.Name).ToList<Agency>();
         }
 
         [OperationContract]
@@ -30,7 +30,7 @@ namespace OneTransitAPI
         public List<Route> GetRoutes(string agencyid)
         {
             IWebService webService = SelectWebService(agencyid);
-            return webService.GetRoutes();
+            return webService.GetRoutes().OrderBy(r => r.ID).ToList<Route>();
         }
 
         [OperationContract]
@@ -46,7 +46,7 @@ namespace OneTransitAPI
         public List<Stop> GetStops(string agencyid)
         {
             IWebService webService = SelectWebService(agencyid);
-            return webService.GetStops();
+            return webService.GetStops().OrderBy(s => s.ID).ToList<Stop>();
         }
 
         [OperationContract]
@@ -54,7 +54,7 @@ namespace OneTransitAPI
         public List<Stop> GetStopsByLocation(string agencyid, double latitude, double longitude, double radius)
         {
             IWebService webService = SelectWebService(agencyid);
-            return webService.GetStopsByLocation(latitude, longitude, radius);
+            return webService.GetStopsByLocation(latitude, longitude, radius).OrderBy(s => Utilities.Distance(s.Latitude, s.Longitude, latitude, longitude)).ToList<Stop>();
         }
 
         [OperationContract]
@@ -62,7 +62,7 @@ namespace OneTransitAPI
         public List<StopTime> GetStopTimes(string agencyid, string stopid)
         {
             IWebService webService = SelectWebService(agencyid);
-            return webService.GetStopTimes(stopid);
+            return webService.GetStopTimes(stopid).OrderBy(t => t.ArrivalTime).ToList<StopTime>();
         }
 
         private IWebService SelectWebService(string agencyid)
