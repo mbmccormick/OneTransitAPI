@@ -42,6 +42,14 @@
                     <b>/stops/getInfo?agency=[agencyid]&stop=[stopid]</b><br />
                     Get a list of transit agencies supported by this API.
                 </div>
+                <div class="method">
+                    <b>/stops/getListByLocation?agency=[agencyid]&lat=[latitude]&lon=[longitude]&radius=[radius]</b><br />
+                    Get a list of routes for a specific transit agency.
+                </div>
+                <div class="method">
+                    <b>/stops/getTimes?agency=[agencyid]&stop=[stopid]</b><br />
+                    Get a list of routes for a specific transit agency.
+                </div>
             </div>
         </div>
         <div id="footer">
