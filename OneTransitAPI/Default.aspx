@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>OneTransitAPI</title>
+    <title>OneTransit</title>
     <link rel="Stylesheet" href="StyleSheet.css" />
 </head>
 <body>
@@ -18,7 +18,7 @@
         </div>
         <div id="content">
             <div class="introduction">
-                OneTransitAPI is a simple service that makes it easy to access real-time public
+                OneTransit is a simple service that makes it easy to access real-time public
                 transit data for over 175 transit agencies. Data is pulled from hundreds of web
                 services to provide real-time data when available. When real-time data is not available,
                 OneTransitAPI delivers scheduled data, which is updated every 72 hours.
@@ -31,25 +31,36 @@
                     a HTTP GET request. OneTransitAPI responds to all methods in JSON format.
                 </p>
                 <div class="method">
-                    <b>/agencies/getList</b><br />
+                    <b>/v1/agencies/getList</b><br />
                     Get a list of transit agencies supported by this API.
                 </div>
                 <div class="method">
-                    <b>/routes/getList?agency=[agencyid]</b><br />
+                    <b>/v1/routes/getList?agency=[agencyid]</b><br />
                     Get a list of routes for a specific transit agency.
                 </div>
                 <div class="method">
-                    <b>/stops/getInfo?agency=[agencyid]&stop=[stopid]</b><br />
-                    Get a list of transit agencies supported by this API.
+                    <b>/v1/stops/getInfo?agency=[agencyid]&stop=[stopid]</b><br />
+                    Get information for a specific stop.
                 </div>
                 <div class="method">
-                    <b>/stops/getListByLocation?agency=[agencyid]&lat=[latitude]&lon=[longitude]&radius=[radius]</b><br />
-                    Get a list of routes for a specific transit agency.
+                    <b>/v1/stops/getList?agency=[agencyid]</b><br />
+                    Get a list of stops for a specific transit agency.
                 </div>
                 <div class="method">
-                    <b>/stops/getTimes?agency=[agencyid]&stop=[stopid]</b><br />
-                    Get a list of routes for a specific transit agency.
+                    <b>/v1/stops/getListByLocation?agency=[agencyid]&lat=[latitude]&lon=[longitude]&radius=[radius]</b><br />
+                    Get a list of stops for a specific transit agency by location.
                 </div>
+                <div class="method">
+                    <b>/v1/stops/getTimes?agency=[agencyid]&stop=[stopid]</b><br />
+                    Get a list of times for a specific stop.
+                </div>
+            </div>
+            <br />
+            <div class="disclaimer">
+                <b>Disclaimer</b>
+                <p>
+                    While this API is currently active and serving up responses, it is still an alpha
+                    release and is not meant for production use. Use this service at your own discretion.</p>
             </div>
         </div>
         <div id="footer">

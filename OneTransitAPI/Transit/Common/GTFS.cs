@@ -54,6 +54,27 @@ namespace OneTransitAPI.Transit.Common
             return result;
         }
 
+        public override List<Stop> GetStops()
+        {
+            Stops = ImportGTFS(TransitAgency.AgencyID, "stops.txt").AsEnumerable();
+
+            List<Stop> result = new List<Stop>();
+
+            foreach (var r in Stops)
+            {
+                Stop s = new Stop();
+                s.ID = r.Field<string>("stop_id");
+                s.Name = r.Field<string>("stop_name");
+                s.Code = r.Field<string>("stop_code");
+                s.Latitude = r.Field<double>("stop_lat");
+                s.Longitude = r.Field<double>("stop_lon");
+
+                result.Add(s);
+            }
+
+            return result;
+        }
+
         public override List<Stop> GetStopsByLocation(double latitude, double longitude, double radius)
         {
             Stops = ImportGTFS(TransitAgency.AgencyID, "stops.txt").AsEnumerable();

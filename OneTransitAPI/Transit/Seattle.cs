@@ -32,6 +32,14 @@ namespace OneTransitAPI.Transit
             return result;
         }
 
+        public override List<Stop> GetStops()
+        {
+            GTFS engine = new GTFS(this.TransitAgency);
+            List<Stop> result = engine.GetStops();
+
+            return result;
+        }
+
         public override List<Stop> GetStopsByLocation(double latitude, double longitude, double radius)
         {
             System.Net.WebClient client = new System.Net.WebClient();

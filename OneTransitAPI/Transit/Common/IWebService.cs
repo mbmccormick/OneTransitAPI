@@ -21,6 +21,8 @@ namespace OneTransitAPI.Transit.Common
         public abstract List<Route> GetRoutes();
 
         public abstract Stop GetStop(string stopid);
+
+        public abstract List<Stop> GetStops();
         
         public abstract List<Stop> GetStopsByLocation(double latitude, double longitude, double radius);
 
