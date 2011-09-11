@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="WindowsAzure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
-  <WebRole name="OneTransitAPI" vmsize="ExtraSmall">
+  <WebRole name="OneTransitAPI" vmsize="Small">
     <Sites>
       <Site name="Web">
         <Bindings>
@@ -19,5 +19,8 @@
     <Imports>
       <Import moduleName="Diagnostics" />
     </Imports>
+    <ConfigurationSettings>
+      <Setting name="DataConnectionString" />
+    </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>
