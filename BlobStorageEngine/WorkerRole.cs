@@ -13,6 +13,7 @@ using OneTransitAPI.Common;
 using OneTransitAPI.Data;
 using System.IO;
 using Ionic.Zip;
+using System.Configuration;
 
 namespace BlobStorageEngine
 {
@@ -34,13 +35,22 @@ namespace BlobStorageEngine
                 try
                 {
                     DatabaseDataContext db = new DatabaseDataContext();
-                    var agencies = from a in db.Agencies where a.GTFSUrl != null orderby a.Name select a;
+                    var agencies = from a in db.Agencies orderby a.Name select a;
 
                     foreach (Agency a in agencies)
                     {
+                        if (a.GTFSUrl == null ||
+                            a.GTFSUrl.Length == 0)
+                        {
+                            continue;
+                        }
+
                         Trace.WriteLine("Downloading new GTFS data for " + a.Name + " (" + a.AgencyID + ")...", "Information");
 
-                        ZipFile gtfsData = ZipFile.Read(web.OpenRead(a.GTFSUrl));
+                        byte[] rawData = web.DownloadData(a.GTFSUrl);
+                        MemoryStream download = new MemoryStream(rawData);
+
+                        ZipFile gtfsData = ZipFile.Read(download);
 
                         foreach (ZipEntry file in gtfsData)
                         {
@@ -50,6 +60,8 @@ namespace BlobStorageEngine
 
                             MemoryStream output = new MemoryStream();
                             file.Extract(output);
+
+                            output.Seek(0, SeekOrigin.Begin);
 
                             blob.UploadFromStream(output);
                         }
@@ -70,7 +82,7 @@ namespace BlobStorageEngine
 
         public override bool OnStart()
         {
-            DiagnosticMonitor.Start("DiagnosticsConnectionString");
+            DiagnosticMonitor.Start("Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString");
 
             RoleEnvironment.Changing += RoleEnvironmentChanging;
 
@@ -91,6 +103,8 @@ namespace BlobStorageEngine
             var storageAccount = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
 
             CloudBlobClient blobStorage = storageAccount.CreateCloudBlobClient();
+            blobStorage.ParallelOperationThreadCount = 1;
+
             container = blobStorage.GetContainerReference("gtfs");
 
             Trace.TraceInformation("Creating storage container...");
@@ -105,6 +119,8 @@ namespace BlobStorageEngine
                     var permissions = container.GetPermissions();
                     permissions.PublicAccess = BlobContainerPublicAccessType.Container;
                     container.SetPermissions(permissions);
+
+                    storageInitialized = true;
                 }
                 catch (StorageClientException e)
                 {
