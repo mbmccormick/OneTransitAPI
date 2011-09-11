@@ -7,6 +7,7 @@ using System.IO;
 using System.Configuration;
 using Microsoft.WindowsAzure.StorageClient;
 using OneTransitAPI.Data;
+using Microsoft.WindowsAzure;
 
 namespace OneTransitAPI.Transit.Common
 {
@@ -187,13 +188,16 @@ namespace OneTransitAPI.Transit.Common
 
         public DataTable ImportGTFS(string blobPath, string blobName)
         {
-            Microsoft.WindowsAzure.StorageCredentialsAccountAndKey storageCredentialsAccountAndKey = new Microsoft.WindowsAzure.StorageCredentialsAccountAndKey(ConfigurationManager.AppSettings["AzureStorageAccount"], ConfigurationManager.AppSettings["AzureStorageKey"]);
+            StorageCredentialsAccountAndKey storageCredentialsAccountAndKey = new StorageCredentialsAccountAndKey(ConfigurationManager.AppSettings["AzureStorageAccount"], ConfigurationManager.AppSettings["AzureStorageKey"]);
+            CloudStorageAccount acct = new CloudStorageAccount(storageCredentialsAccountAndKey, true);
+            
+            CloudBlobClient blobStorage = acct.CreateCloudBlobClient();
+            blobStorage.ParallelOperationThreadCount = 1;
 
-            Microsoft.WindowsAzure.CloudStorageAccount acct = new Microsoft.WindowsAzure.CloudStorageAccount(storageCredentialsAccountAndKey, true);
-            CloudBlobClient client = acct.CreateCloudBlobClient();
+            CloudBlobContainer container = blobStorage.GetContainerReference("gtfs");
 
             MemoryStream stream = new MemoryStream();
-            CloudBlob blob = client.GetBlobReference("gtfs/" + blobPath + "/" + blobName);
+            CloudBlob blob = container.GetBlobReference(blobPath + "/" + blobName);
 
             DataTable dt = new DataTable(blobName);
             switch (blobName)

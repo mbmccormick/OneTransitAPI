@@ -12,7 +12,7 @@
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="DataConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="DataConnectionString" value="DefaultEndpointsProtocol=http;AccountName=onetransitapi;AccountKey=1yFRXUw2GZEjNuOLrQgjBZ+T6dEGtoxIufzpCLGK3cbNPy6Ip+ohXftP/W0KyV8ufaO7+EyS+4mau9Pin+PnLw==" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
