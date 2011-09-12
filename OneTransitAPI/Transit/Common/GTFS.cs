@@ -8,30 +8,39 @@ using System.Configuration;
 using Microsoft.WindowsAzure.StorageClient;
 using OneTransitAPI.Data;
 using Microsoft.WindowsAzure;
+using Stancer.GTFSEngine;
 
 namespace OneTransitAPI.Transit.Common
 {
     public class GTFS : IWebService
     {
-        private EnumerableRowCollection<DataRow> Stops;
-        private EnumerableRowCollection<DataRow> StopTimes;
-        private EnumerableRowCollection<DataRow> Routes;
-        private EnumerableRowCollection<DataRow> Trips;
+        private Engine gtfsEngine;
 
-        public GTFS(Agency transitAgency) : base(transitAgency) { }
+        public GTFS(Agency transitAgency) : base(transitAgency)
+        {
+            StorageCredentialsAccountAndKey storageCredentialsAccountAndKey = new StorageCredentialsAccountAndKey(ConfigurationManager.AppSettings["AzureStorageAccount"], ConfigurationManager.AppSettings["AzureStorageKey"]);
+            CloudStorageAccount acct = new CloudStorageAccount(storageCredentialsAccountAndKey, true);
+            
+            CloudBlobClient blobStorage = acct.CreateCloudBlobClient();
+            blobStorage.ParallelOperationThreadCount = 1;
+
+            CloudBlobContainer container = blobStorage.GetContainerReference("gtfs");
+
+            AzureStorageSourceDataCollection data = new AzureStorageSourceDataCollection(container, transitAgency.AgencyID.ToLower());
+
+            gtfsEngine = new Engine(data);
+        }
 
         public override List<Route> GetRoutes()
         {
-            Routes = ImportGTFS(TransitAgency.AgencyID, "routes.txt").AsEnumerable();
-
             List<Route> result = new List<Route>();
 
-            foreach (var r in Routes)
+            foreach (var r in gtfsEngine.Routes)
             {
                 Route rt = new Route();
-                rt.ID = r.Field<string>("route_id");
-                rt.ShortName = r.Field<string>("route_short_name");
-                rt.LongName = r.Field<string>("route_long_name");
+                rt.ID = r.RouteID;
+                rt.ShortName = r.ShortName;
+                rt.LongName = r.LongName;
 
                 result.Add(rt);
             }
@@ -41,34 +50,30 @@ namespace OneTransitAPI.Transit.Common
 
         public override Stop GetStop(string stopid)
         {
-            Stops = ImportGTFS(TransitAgency.AgencyID, "stops.txt").AsEnumerable();
-
-            var r = (from s in Stops where s.Field<string>("stop_id").ToUpper() == stopid select s).Single();
+            var r = (from s in gtfsEngine.Stops where s.ID.ToUpper() == stopid.ToUpper() select s).Single();
 
             Stop result = new Stop();
-            result.ID = r.Field<string>("stop_id");
-            result.Name = r.Field<string>("stop_name");
-            result.Code = r.Field<string>("stop_code");
-            result.Latitude = r.Field<double>("stop_lat");
-            result.Longitude = r.Field<double>("stop_lon");
+            result.ID = r.ID;
+            result.Name = r.Name;
+            result.Code = r.Code;
+            result.Latitude = Convert.ToDouble(r.Lat);
+            result.Longitude = Convert.ToDouble(r.Lon);
 
             return result;
         }
 
         public override List<Stop> GetStops()
         {
-            Stops = ImportGTFS(TransitAgency.AgencyID, "stops.txt").AsEnumerable();
-
             List<Stop> result = new List<Stop>();
 
-            foreach (var r in Stops)
+            foreach (var r in gtfsEngine.Stops)
             {
                 Stop s = new Stop();
-                s.ID = r.Field<string>("stop_id");
-                s.Name = r.Field<string>("stop_name");
-                s.Code = r.Field<string>("stop_code");
-                s.Latitude = r.Field<double>("stop_lat");
-                s.Longitude = r.Field<double>("stop_lon");
+                s.ID = r.ID;
+                s.Name = r.Name;
+                s.Code = r.Code;
+                s.Latitude = Convert.ToDouble(r.Lat);
+                s.Longitude = Convert.ToDouble(r.Lon);
 
                 result.Add(s);
             }
@@ -78,20 +83,18 @@ namespace OneTransitAPI.Transit.Common
 
         public override List<Stop> GetStopsByLocation(double latitude, double longitude, double radius)
         {
-            Stops = ImportGTFS(TransitAgency.AgencyID, "stops.txt").AsEnumerable();
-
             List<Stop> result = new List<Stop>();
 
-            foreach (var r in Stops)
+            foreach (var r in gtfsEngine.Stops)
             {
-                if (Utilities.Distance(latitude, longitude, r.Field<double>("stop_lat"), r.Field<double>("stop_lon")) <= radius)
+                if (Utilities.Distance(latitude, longitude, Convert.ToDouble(r.Lat), Convert.ToDouble(r.Lon)) <= radius)
                 {
                     Stop s = new Stop();
-                    s.ID = r.Field<string>("stop_id");
-                    s.Name = r.Field<string>("stop_name");
-                    s.Code = r.Field<string>("stop_code");
-                    s.Latitude = r.Field<double>("stop_lat");
-                    s.Longitude = r.Field<double>("stop_lon");
+                    s.ID = r.ID;
+                    s.Name = r.Name;
+                    s.Code = r.Code;
+                    s.Latitude = Convert.ToDouble(r.Lat);
+                    s.Longitude = Convert.ToDouble(r.Lon);
 
                     result.Add(s);
                 }
@@ -102,11 +105,6 @@ namespace OneTransitAPI.Transit.Common
 
         public override List<StopTime> GetStopTimes(string stopID)
         {
-            Stops = ImportGTFS(TransitAgency.AgencyID, "stops.txt").AsEnumerable();
-            StopTimes = ImportGTFS(TransitAgency.AgencyID, "stop_times.txt").AsEnumerable();
-            Routes = ImportGTFS(TransitAgency.AgencyID, "routes.txt").AsEnumerable();
-            Trips = ImportGTFS(TransitAgency.AgencyID, "trips.txt").AsEnumerable();
-
             List<StopTime> result = new List<StopTime>();
 
             var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
@@ -116,15 +114,15 @@ namespace OneTransitAPI.Transit.Common
             var tod1 = now.AddHours(2).TimeOfDay;
 
             var sts =
-                from st in StopTimes
-                let StopID = st.Field<string>("stop_id")
+                from st in gtfsEngine.Stop_Times
+                let StopID = st.StopID
                 where StopID == stopID
-                where st["departure_time"].ToString() != ""
-                let DepartureTime = st.Field<DateTime>("departure_time")
-                let ArrivalTime = st.Field<DateTime>("arrival_time")
-                where DepartureTime.TimeOfDay >= tod0
-                where DepartureTime.TimeOfDay < tod1
-                let TripID = st.Field<string>("trip_id")
+                where st.DepartureTime.ToString() != ""
+                let DepartureTime = st.DepartureTime
+                let ArrivalTime = st.ArrivalTime
+                where DepartureTime >= tod0
+                where DepartureTime < tod1
+                let TripID = st.TripID
                 select new
                 {
                     StopID,
@@ -134,10 +132,10 @@ namespace OneTransitAPI.Transit.Common
                 };
 
             var ts =
-                from t in Trips
-                where t["route_id"].ToString() != ""
-                let TripID = t.Field<string>("trip_id")
-                let RouteID = t.Field<string>("route_id")
+                from t in gtfsEngine.Trips
+                where t.RouteID.ToString() != ""
+                let TripID = t.TripID
+                let RouteID = t.RouteID
                 select new
                 {
                     TripID,
@@ -145,10 +143,10 @@ namespace OneTransitAPI.Transit.Common
                 };
 
             var rs =
-                from r in Routes
-                let RouteID = r.Field<string>("route_id")
-                let RouteShortName = r.Field<string>("route_short_name")
-                let RouteLongName = r.Field<string>("route_long_name")
+                from r in gtfsEngine.Routes
+                let RouteID = r.RouteID
+                let RouteShortName = r.ShortName
+                let RouteLongName = r.LongName
                 select new
                 {
                     RouteID,
@@ -175,8 +173,8 @@ namespace OneTransitAPI.Transit.Common
                 StopTime t = new StopTime();
                 t.RouteShortName = r.Route.RouteShortName;
                 t.RouteLongName = r.Route.RouteLongName;
-                t.ArrivalTime = r.StopTime.ArrivalTime;
-                t.DepartureTime = r.StopTime.DepartureTime;
+                t.ArrivalTime = now.Date.Add(r.StopTime.ArrivalTime);
+                t.DepartureTime = now.Date.Add(r.StopTime.DepartureTime);
                 t.Type = 0;
 
                 if ((from x in result where x.RouteShortName == t.RouteShortName select x).Count() < 2)
@@ -184,112 +182,6 @@ namespace OneTransitAPI.Transit.Common
             }
 
             return result;
-        }
-
-        public DataTable ImportGTFS(string blobPath, string blobName)
-        {
-            StorageCredentialsAccountAndKey storageCredentialsAccountAndKey = new StorageCredentialsAccountAndKey(ConfigurationManager.AppSettings["AzureStorageAccount"], ConfigurationManager.AppSettings["AzureStorageKey"]);
-            CloudStorageAccount acct = new CloudStorageAccount(storageCredentialsAccountAndKey, true);
-            
-            CloudBlobClient blobStorage = acct.CreateCloudBlobClient();
-            blobStorage.ParallelOperationThreadCount = 1;
-
-            CloudBlobContainer container = blobStorage.GetContainerReference("gtfs");
-
-            MemoryStream stream = new MemoryStream();
-            CloudBlob blob = container.GetBlobReference(blobPath + "/" + blobName);
-
-            DataTable dt = new DataTable(blobName);
-            switch (blobName)
-            {
-                case "routes.txt":
-                    // route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
-                    dt.Columns.Add("route_id", typeof(string));
-                    dt.Columns.Add("agency_id", typeof(string));
-                    dt.Columns.Add("route_short_name", typeof(string));
-                    dt.Columns.Add("route_long_name", typeof(string));
-                    break;
-                case "trips.txt":
-                    // route_id,service_id,trip_id,trip_headsign,trip_short_name,direction_id,block_id,shape_id
-                    dt.Columns.Add("route_id", typeof(string));
-                    dt.Columns.Add("service_id", typeof(string));
-                    dt.Columns.Add("trip_id", typeof(string));
-                    dt.Columns.Add("trip_headsign", typeof(string));
-                    break;
-                case "stops.txt":
-                    // stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,location_type,parent_station
-                    dt.Columns.Add("stop_id", typeof(string));
-                    dt.Columns.Add("stop_code", typeof(string));
-                    dt.Columns.Add("stop_name", typeof(string));
-                    dt.Columns.Add("stop_desc", typeof(string));
-                    dt.Columns.Add("stop_lat", typeof(double));
-                    dt.Columns.Add("stop_lon", typeof(double));
-                    break;
-                case "stop_times.txt":
-                    // trip_id,arrival_time,departure_time,stop_id,stop_sequence,stop_headsign,pickup_type,drop_off_type,shape_dist_traveled
-                    dt.Columns.Add("trip_id", typeof(string));
-                    dt.Columns.Add("arrival_time", typeof(DateTime));
-                    dt.Columns.Add("departure_time", typeof(DateTime));
-                    dt.Columns.Add("stop_id", typeof(string));
-                    break;
-            }
-
-            blob.DownloadToStream(stream);
-            stream.Position = 0;
-
-            using (StreamReader readBlob = new StreamReader(stream))
-            {
-                string line = readBlob.ReadLine();
-                while ((line = readBlob.ReadLine()) != null)
-                {
-                    switch (TransitAgency.AgencyID)
-                    {
-                        case "mta":
-                            if (line.Contains("\""))
-                            {
-                                string tmp = line.Split('"')[0] + line.Split('"')[2];
-                                line = tmp;
-                            }
-                            break;
-                        case "citybus":
-                            line = line.Replace("\"", "");
-                            break;
-                        case "cta":
-                            line = line.Replace("\"", "");
-                            break;
-                        default:
-                            break;
-                    }
-
-                    switch (blobName)
-                    {
-                        case "routes.txt":
-                            dt.Rows.Add(new object[] { line.Split(',')[0], line.Split(',')[1], line.Split(',')[2], line.Split(',')[3] });
-                            break;
-                        case "trips.txt":
-                            dt.Rows.Add(new object[] { line.Split(',')[0], line.Split(',')[1], line.Split(',')[2], line.Split(',')[3] });
-                            break;
-                        case "stops.txt":
-                            if (line.Split(',').Count() < 5) continue;
-                            if (line.Split(',')[4].Length == 0 ||
-                                line.Split(',')[5].Length == 0) continue;
-                            dt.Rows.Add(new object[] { line.Split(',')[0], line.Split(',')[1], line.Split(',')[2], line.Split(',')[3], Convert.ToDouble(line.Split(',')[4]), Convert.ToDouble(line.Split(',')[5]) });
-                            break;
-                        case "stop_times.txt":
-                            if (Convert.ToInt32(line.Split(',')[1].Substring(0, 2).Replace(":", "")) > 23 ||
-                                Convert.ToInt32(line.Split(',')[2].Substring(0, 2).Replace(":", "")) > 23) continue;
-                            DateTime arrival = DateTime.UtcNow.Date.AddHours(Convert.ToDateTime("01/01/1900 " + line.Split(',')[1]).Hour).AddMinutes(Convert.ToDateTime("01/01/1900 " + line.Split(',')[1]).Minute).AddSeconds(Convert.ToDateTime("01/01/1900 " + line.Split(',')[1]).Second);
-                            DateTime departure = DateTime.UtcNow.Date.AddHours(Convert.ToDateTime("01/01/1900 " + line.Split(',')[2]).Hour).AddMinutes(Convert.ToDateTime("01/01/1900 " + line.Split(',')[2]).Minute).AddSeconds(Convert.ToDateTime("01/01/1900 " + line.Split(',')[2]).Second);
-                            dt.Rows.Add(new object[] { line.Split(',')[0], arrival, departure, line.Split(',')[3] });
-                            break;
-                        default:
-                            dt.Rows.Add(line.Split(','));
-                            break;
-                    }
-                }
-            }
-
-            return dt;
         }
     }
 }

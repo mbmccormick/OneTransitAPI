@@ -110,7 +110,12 @@
     <Compile Include="Transit\WMATA.cs" />
     <Compile Include="Transit\Common\IWebService.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\GTFSEngine\GTFSEngine.csproj">
+      <Project>{E3B62AD1-8FB9-4930-A9BE-ED4A71E68045}</Project>
+      <Name>GTFSEngine</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="Data\Database.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>

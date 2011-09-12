@@ -36,18 +36,6 @@ namespace OneTransitAPI.Transit
             GTFS engine = new GTFS(this.TransitAgency);
             List<Stop> result = engine.GetStops();
 
-            foreach (var s in result)
-            {
-                var tmp = s.ID; // customized for CityBus
-                s.ID = s.Code;
-                s.Code = tmp;
-
-                s.Name = s.Name.ToUpper().Replace("(@ SHELTER)", "");
-                s.Name = s.Name.ToUpper().Replace("(AT SHELTER)", "");
-                s.Name = s.Name.ToUpper().Replace("- AT SHELTER", "");
-                s.Name = s.Name.Trim();
-            }
-
             return result;
         }
 
