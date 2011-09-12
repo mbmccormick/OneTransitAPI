@@ -103,7 +103,7 @@ namespace OneTransitAPI.Transit.Common
             return result;
         }
 
-        public override List<StopTime> GetStopTimes(string stopID)
+        public override List<StopTime> GetStopTimes(string stopid)
         {
             List<StopTime> result = new List<StopTime>();
 
@@ -112,73 +112,35 @@ namespace OneTransitAPI.Transit.Common
 
             var tod0 = now.TimeOfDay;
             var tod1 = now.AddHours(2).TimeOfDay;
+            
+            var stopTimes = from s in gtfsEngine.Stop_Times
+                            where s.StopID.ToUpper() == stopid.ToUpper() &&
+                                  s.DepartureTime >= tod0 &&
+                                  s.DepartureTime < tod1
+                            select s;
 
-            var sts =
-                from st in gtfsEngine.Stop_Times
-                let StopID = st.StopID
-                where StopID == stopID
-                where st.DepartureTime.ToString() != ""
-                let DepartureTime = st.DepartureTime
-                let ArrivalTime = st.ArrivalTime
-                where DepartureTime >= tod0
-                where DepartureTime < tod1
-                let TripID = st.TripID
-                select new
-                {
-                    StopID,
-                    TripID,
-                    ArrivalTime,
-                    DepartureTime
-                };
-
-            var ts =
-                from t in gtfsEngine.Trips
-                where t.RouteID.ToString() != ""
-                let TripID = t.TripID
-                let RouteID = t.RouteID
-                select new
-                {
-                    TripID,
-                    RouteID,
-                };
-
-            var rs =
-                from r in gtfsEngine.Routes
-                let RouteID = r.RouteID
-                let RouteShortName = r.ShortName
-                let RouteLongName = r.LongName
-                select new
-                {
-                    RouteID,
-                    RouteShortName,
-                    RouteLongName
-                };
-
-            var tripLookup = ts.ToDictionary(t => t.TripID);
-            var routeLookup = rs.ToDictionary(r => r.RouteID);
-
-            var query = from StopTime in sts.ToArray()
-                        let Trip = tripLookup[StopTime.TripID]
-                        let Route = routeLookup[Trip.RouteID]
+            var trips = gtfsEngine.Trips.ToDictionary(t => t.TripID);
+            var routes = gtfsEngine.Routes.ToDictionary(r => r.RouteID);
+            
+            var query = from StopTime in stopTimes
+                        let Trip = trips[StopTime.TripID]
+                        let Route = routes[Trip.RouteID]
                         orderby StopTime.DepartureTime
                         select new
                         {
                             StopTime,
                             Trip,
-                            Route,
+                            Route
                         };
 
             foreach (var r in query)
             {
                 StopTime t = new StopTime();
-                t.RouteShortName = r.Route.RouteShortName;
-                t.RouteLongName = r.Route.RouteLongName;
+                t.RouteShortName = r.Route.ShortName;
+                t.RouteLongName = r.Route.LongName;
                 t.ArrivalTime = now.Date.Add(r.StopTime.ArrivalTime);
                 t.DepartureTime = now.Date.Add(r.StopTime.DepartureTime);
                 t.Type = 0;
-
-                if ((from x in result where x.RouteShortName == t.RouteShortName select x).Count() < 2)
-                    result.Add(t);
             }
 
             return result;
