@@ -1,0 +1,3 @@
+[submodule "GTFSEngine"]
+	path = GTFSEngine
+	url = git@github.com:mbmccormick/GTFSEngine.git
