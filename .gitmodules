@@ -1,3 +1,6 @@
 [submodule "GTFSEngine"]
 	path = GTFSEngine
 	url = git@github.com:mbmccormick/GTFSEngine.git
+[submodule "Ximura"]
+	path = Ximura
+	url = git@github.com:mbmccormick/Ximura.git
