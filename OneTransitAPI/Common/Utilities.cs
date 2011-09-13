@@ -13,7 +13,7 @@ namespace OneTransitAPI.Common
             DatabaseDataContext db = new DatabaseDataContext();
 
             Information e = new Information();
-            e.Message = "[" + category.ToUpper() + "] " + message;
+            e.Message = "[" + category + "] " + message;
             e.CreatedDate = DateTime.UtcNow;
 
             db.Informations.InsertOnSubmit(e);

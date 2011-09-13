@@ -36,7 +36,7 @@ namespace OneTransitAPI
         {
             Exception ex = Server.GetLastError().GetBaseException();
 
-            Utilities.LogEvent("Web Service", "An unhandled exception has occurred. Message: " + ex.Message + "; " +
+            Utilities.LogEvent("OneTransitAPI", "An unhandled exception has occurred. Message: " + ex.Message + "; " +
                                                                                    "Source: " + ex.Source + "; " +
                                                                                    "TargetSite: " + ex.TargetSite + "; " +
                                                                                    "StackTrace: " + ex.StackTrace + ";");
