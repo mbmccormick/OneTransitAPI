@@ -35,7 +35,7 @@ namespace BlobStorageEngine
                 try
                 {
                     DatabaseDataContext db = new DatabaseDataContext();
-                    var agencies = from a in db.Agencies orderby a.Name select a;
+                    var agencies = from a in db.Agencies where a.AgencyID == "dccirculator" orderby a.Name select a; // from a in db.Agencies orderby a.Name select a;
 
                     foreach (Agency a in agencies)
                     {
@@ -69,7 +69,7 @@ namespace BlobStorageEngine
                         Utilities.LogEvent("BlobStorageEngine", "Complete.");
                     }
                 }
-                catch (StorageClientException ex)
+                catch (Exception ex)
                 {
                     Utilities.LogEvent("BlobStorageEngine", "An unhandled exception has occurred. Message: " + ex.Message + "; " +
                                                                                                 "Source: " + ex.Source + "; " +
@@ -87,8 +87,6 @@ namespace BlobStorageEngine
         public override bool OnStart()
         {
             DiagnosticMonitor.Start("Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString");
-
-            RoleEnvironment.Changing += RoleEnvironmentChanging;
 
             CloudStorageAccount.SetConfigurationSettingPublisher((configName, configSetter) =>
             {
@@ -143,12 +141,6 @@ namespace BlobStorageEngine
             }
 
             return base.OnStart();
-        }
-
-        private void RoleEnvironmentChanging(object sender, RoleEnvironmentChangingEventArgs e)
-        {
-            if (e.Changes.Any(change => change is RoleEnvironmentConfigurationSettingChange))
-                e.Cancel = true;
         }
     }
 }
