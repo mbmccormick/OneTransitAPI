@@ -2,11 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using OneTransitAPI.Data;
 
 namespace OneTransitAPI.Common
 {
     public class Utilities
     {
+        public static void LogEvent(string category, string message)
+        {
+            DatabaseDataContext db = new DatabaseDataContext();
+
+            Information e = new Information();
+            e.Message = "[" + category.ToUpper() + "] " + message;
+            e.CreatedDate = DateTime.UtcNow;
+
+            db.Informations.InsertOnSubmit(e);
+
+            db.SubmitChanges();
+        }
+
         public static TimeZoneInfo OlsonTimeZoneToTimeZoneInfo(string olsonTimeZoneId)
         {
             var olsonWindowsTimes = new Dictionary<string, string>()

@@ -11,66 +11,188 @@
 
 namespace OneTransitAPI.Data
 {
-    using System.Data.Linq;
-    using System.Data.Linq.Mapping;
-    using System.Data;
-    using System.Collections.Generic;
-    using System.Reflection;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.ComponentModel;
-    using System;
-
-    [global::System.Data.Linq.Mapping.DatabaseAttribute(Name = "OneTransitAPI")]
-    public partial class DatabaseDataContext : System.Data.Linq.DataContext
-    {
-
-        private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
-
-        #region Extensibility Method Definitions
-        partial void OnCreated();
-        partial void InsertAgency(Agency instance);
-        partial void UpdateAgency(Agency instance);
-        partial void DeleteAgency(Agency instance);
-        #endregion
-
-        public DatabaseDataContext() :
-            base(global::System.Configuration.ConfigurationManager.ConnectionStrings["OneTransitAPIConnectionString"].ConnectionString, mappingSource)
-        {
-            OnCreated();
-        }
-
-        public DatabaseDataContext(string connection) :
-            base(connection, mappingSource)
-        {
-            OnCreated();
-        }
-
-        public DatabaseDataContext(System.Data.IDbConnection connection) :
-            base(connection, mappingSource)
-        {
-            OnCreated();
-        }
-
-        public DatabaseDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) :
-            base(connection, mappingSource)
-        {
-            OnCreated();
-        }
-
-        public DatabaseDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) :
-            base(connection, mappingSource)
-        {
-            OnCreated();
-        }
-
-        public System.Data.Linq.Table<Agency> Agencies
-        {
-            get
-            {
-                return this.GetTable<Agency>();
-            }
-        }
-    }
+	using System.Data.Linq;
+	using System.Data.Linq.Mapping;
+	using System.Data;
+	using System.Collections.Generic;
+	using System.Reflection;
+	using System.Linq;
+	using System.Linq.Expressions;
+	using System.ComponentModel;
+	using System;
+	
+	
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="OneTransitAPI")]
+	public partial class DatabaseDataContext : System.Data.Linq.DataContext
+	{
+		
+		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
+		
+    #region Extensibility Method Definitions
+    partial void OnCreated();
+    partial void InsertAgency(Agency instance);
+    partial void UpdateAgency(Agency instance);
+    partial void DeleteAgency(Agency instance);
+    partial void InsertInformation(Information instance);
+    partial void UpdateInformation(Information instance);
+    partial void DeleteInformation(Information instance);
+    #endregion
+		
+		public DatabaseDataContext() : 
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["OneTransitAPIConnectionString"].ConnectionString, mappingSource)
+		{
+			OnCreated();
+		}
+		
+		public DatabaseDataContext(string connection) : 
+				base(connection, mappingSource)
+		{
+			OnCreated();
+		}
+		
+		public DatabaseDataContext(System.Data.IDbConnection connection) : 
+				base(connection, mappingSource)
+		{
+			OnCreated();
+		}
+		
+		public DatabaseDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+				base(connection, mappingSource)
+		{
+			OnCreated();
+		}
+		
+		public DatabaseDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+				base(connection, mappingSource)
+		{
+			OnCreated();
+		}
+		
+		public System.Data.Linq.Table<Agency> Agencies
+		{
+			get
+			{
+				return this.GetTable<Agency>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Information> Informations
+		{
+			get
+			{
+				return this.GetTable<Information>();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Information")]
+	public partial class Information : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Message;
+		
+		private System.DateTime _CreatedDate;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnMessageChanging(string value);
+    partial void OnMessageChanged();
+    partial void OnCreatedDateChanging(System.DateTime value);
+    partial void OnCreatedDateChanged();
+    #endregion
+		
+		public Information()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Message", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Message
+		{
+			get
+			{
+				return this._Message;
+			}
+			set
+			{
+				if ((this._Message != value))
+				{
+					this.OnMessageChanging(value);
+					this.SendPropertyChanging();
+					this._Message = value;
+					this.SendPropertyChanged("Message");
+					this.OnMessageChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
+		public System.DateTime CreatedDate
+		{
+			get
+			{
+				return this._CreatedDate;
+			}
+			set
+			{
+				if ((this._CreatedDate != value))
+				{
+					this.OnCreatedDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreatedDate = value;
+					this.SendPropertyChanged("CreatedDate");
+					this.OnCreatedDateChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
 }
 #pragma warning restore 1591

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="OneTransitAPI" Class="DatabaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=uu7tqu0niw.database.windows.net;Initial Catalog=OneTransitAPI;Persist Security Info=True;User ID=mbmccormick" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="OneTransitAPIConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=ick5mba97o.database.windows.net;Initial Catalog=OneTransitAPI;Persist Security Info=True;User ID=mbmccormick" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="OneTransitAPIConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Agencies" Member="Agencies">
     <Type Name="Agency">
       <Column Name="AgencyID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -7,6 +7,13 @@
       <Column Name="State" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="TimeZone" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="GTFSUrl" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Information" Member="Informations">
+    <Type Name="Information">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Message" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
 </Database>

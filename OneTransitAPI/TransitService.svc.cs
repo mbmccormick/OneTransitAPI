@@ -82,44 +82,14 @@ namespace OneTransitAPI
                 case "cta":
                     webService = new CTA(agency);
                     break;
-                case "lanta":
-                    webService = new GTFS(agency);
-                    break;
-                case "manchester":
-                    webService = new GTFS(agency);
-                    break;
-                case "massport":
-                    webService = new GTFS(agency);
-                    break;
-                case "msl":
-                    webService = new GTFS(agency);
-                    break;
-                case "mta":
-                    webService = new GTFS(agency);
-                    break;
-                case "riderta":
-                    webService = new GTFS(agency);
-                    break;
-                case "sdmts":
-                    webService = new GTFS(agency);
-                    break;
                 case "seattle":
                     webService = new Seattle(agency);
-                    break;
-                case "stanford":
-                    webService = new GTFS(agency);
-                    break;
-                case "translink":
-                    webService = new GTFS(agency);
-                    break;
-                case "ttc":
-                    webService = new GTFS(agency);
                     break;
                 case "wmata":
                     webService = new WMATA(agency);
                     break;
                 default:
-                    webService = new RouteShout(agency);
+                    webService = new GTFS(agency);
                     break;
             }
 

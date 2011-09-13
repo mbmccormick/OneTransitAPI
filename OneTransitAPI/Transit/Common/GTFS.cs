@@ -141,6 +141,8 @@ namespace OneTransitAPI.Transit.Common
                 t.ArrivalTime = now.Date.Add(r.StopTime.ArrivalTime);
                 t.DepartureTime = now.Date.Add(r.StopTime.DepartureTime);
                 t.Type = 0;
+
+                result.Add(t);
             }
 
             return result;

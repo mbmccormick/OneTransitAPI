@@ -6,6 +6,7 @@ using System.Web.Security;
 using System.Web.SessionState;
 using System.Web.Routing;
 using System.ServiceModel.Activation;
+using OneTransitAPI.Common;
 
 namespace OneTransitAPI
 {
@@ -33,7 +34,12 @@ namespace OneTransitAPI
 
         protected void Application_Error(object sender, EventArgs e)
         {
+            Exception ex = Server.GetLastError().GetBaseException();
 
+            Utilities.LogEvent("Web Service", "An unhandled exception has occurred. Message: " + ex.Message + "; " +
+                                                                                   "Source: " + ex.Source + "; " +
+                                                                                   "TargetSite: " + ex.TargetSite + "; " +
+                                                                                   "StackTrace: " + ex.StackTrace + ";");
         }
 
         protected void Session_End(object sender, EventArgs e)

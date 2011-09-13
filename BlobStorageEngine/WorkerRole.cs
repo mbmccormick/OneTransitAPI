@@ -23,14 +23,14 @@ namespace BlobStorageEngine
 
         public override void Run()
         {
-            Trace.WriteLine("Initializing.", "Information");
+            Utilities.LogEvent("Background Worker", "Initializing.");
 
             WebClient web = new WebClient();
             web.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.CacheIfAvailable);
 
             while (true)
             {
-                Trace.WriteLine("Waking up...", "Information");
+                Utilities.LogEvent("Background Worker", "Waking up...");
 
                 try
                 {
@@ -45,7 +45,7 @@ namespace BlobStorageEngine
                             continue;
                         }
 
-                        Trace.WriteLine("Downloading new GTFS data for " + a.Name + " (" + a.AgencyID + ")...", "Information");
+                        Utilities.LogEvent("Background Worker", "Downloading new GTFS data for " + a.Name + " (" + a.AgencyID + ")...");
 
                         byte[] rawData = web.DownloadData(a.GTFSUrl);
                         MemoryStream download = new MemoryStream(rawData);
@@ -54,7 +54,7 @@ namespace BlobStorageEngine
 
                         foreach (ZipEntry file in gtfsData)
                         {
-                            Trace.WriteLine("Saving " + file.FileName + " to storage.", "Information");
+                            Utilities.LogEvent("Background Worker", "Saving " + file.FileName + " to storage.");
 
                             CloudBlob blob = container.GetBlobReference(a.AgencyID.ToLower() + "/" + file.FileName.ToLower());
 
@@ -66,16 +66,20 @@ namespace BlobStorageEngine
                             blob.UploadFromStream(output);
                         }
 
-                        Trace.WriteLine("Complete.", "Information");
+                        Utilities.LogEvent("Background Worker", "Complete.");
                     }
                 }
-                catch (StorageClientException e)
+                catch (StorageClientException ex)
                 {
-                    Trace.TraceError("Exception when processing queue item. Message: '{0}'", e.Message);
+                    Utilities.LogEvent("Background Worker", "An unhandled exception has occurred. Message: " + ex.Message + "; " +
+                                                                                                "Source: " + ex.Source + "; " +
+                                                                                                "TargetSite: " + ex.TargetSite + "; " +
+                                                                                                "StackTrace: " + ex.StackTrace + ";");
+
                     System.Threading.Thread.Sleep(5000);
                 }
 
-                Trace.WriteLine("Going to sleep.", "Information");
+                Utilities.LogEvent("Background Worker", "Going to sleep.");
                 Thread.Sleep(1000 * 60 * 60 * 24 * 7); // execute every 7 days
             }
         }
@@ -107,7 +111,7 @@ namespace BlobStorageEngine
 
             container = blobStorage.GetContainerReference("gtfs");
 
-            Trace.TraceInformation("Creating storage container...");
+            Utilities.LogEvent("Background Worker", "Creating storage container...");
 
             bool storageInitialized = false;
             while (!storageInitialized)
@@ -126,7 +130,7 @@ namespace BlobStorageEngine
                 {
                     if (e.ErrorCode == StorageErrorCode.TransportError)
                     {
-                        Trace.TraceError("Storage services initialization failure. Check your storage account configuration settings. If running locally, ensure that the Development Storage service is running. Message: '{0}'", e.Message);
+                        Utilities.LogEvent("Background Worker", "Storage services initialization failure. Check your storage account configuration settings.");
                         System.Threading.Thread.Sleep(5000);
                     }
                     else
