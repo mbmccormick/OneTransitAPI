@@ -91,12 +91,6 @@ namespace OneTransitAPI.Transit
 
                 var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
                 var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc)).ToLocalTime();
-                                 
-                if (this.TransitAgency.FriendlyTimeZone.IsDaylightSavingTime(now) == true)
-                {
-                    t.ArrivalTime = t.ArrivalTime.Add(new TimeSpan(1, 0, 0));
-                    t.DepartureTime = t.DepartureTime.Add(new TimeSpan(1, 0, 0));
-                }
                          
                 if ((from x in result where x.RouteShortName == t.RouteShortName select x).Count() < 2)
                     result.Add(t);

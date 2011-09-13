@@ -108,7 +108,7 @@ namespace OneTransitAPI.Transit.Common
             List<StopTime> result = new List<StopTime>();
 
             var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
-            var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc)).ToLocalTime();
+            var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
 
             var tod0 = now.TimeOfDay;
             var tod1 = now.AddHours(2).TimeOfDay;
@@ -138,8 +138,8 @@ namespace OneTransitAPI.Transit.Common
                 StopTime t = new StopTime();
                 t.RouteShortName = r.Route.ShortName;
                 t.RouteLongName = r.Route.LongName;
-                t.ArrivalTime = now.Date.Add(r.StopTime.ArrivalTime);
-                t.DepartureTime = now.Date.Add(r.StopTime.DepartureTime);
+                t.ArrivalTime = now.Date.Add(r.StopTime.ArrivalTime).ToString("t");
+                t.DepartureTime = now.Date.Add(r.StopTime.DepartureTime).ToString("t");
                 t.Type = 0;
 
                 result.Add(t);

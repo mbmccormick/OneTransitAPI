@@ -23,19 +23,19 @@ namespace BlobStorageEngine
 
         public override void Run()
         {
-            Utilities.LogEvent("BlobStorageEngine", "Initializing.");
-
             WebClient web = new WebClient();
             web.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.CacheIfAvailable);
 
             while (true)
             {
+                Thread.Sleep(1000 * 60 * 60 * 72);
+
                 Utilities.LogEvent("BlobStorageEngine", "Waking up...");
 
                 try
                 {
                     DatabaseDataContext db = new DatabaseDataContext();
-                    var agencies = from a in db.Agencies where a.AgencyID == "dccirculator" orderby a.Name select a; // from a in db.Agencies orderby a.Name select a;
+                    var agencies = from a in db.Agencies orderby a.Name select a;
 
                     foreach (Agency a in agencies)
                     {
@@ -80,13 +80,12 @@ namespace BlobStorageEngine
                 }
 
                 Utilities.LogEvent("BlobStorageEngine", "Going to sleep.");
-                Thread.Sleep(1000 * 60 * 60 * 24 * 7); // execute every 7 days
             }
         }
 
         public override bool OnStart()
         {
-            DiagnosticMonitor.Start("Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString");
+            RoleEnvironment.Changing += RoleEnvironment_Changing;
 
             CloudStorageAccount.SetConfigurationSettingPublisher((configName, configSetter) =>
             {
@@ -140,7 +139,15 @@ namespace BlobStorageEngine
                 }
             }
 
+            Utilities.LogEvent("BlobStorageEngine", "Ready.");
+
             return base.OnStart();
+        }
+
+        private void RoleEnvironment_Changing(object sender, RoleEnvironmentChangingEventArgs e)
+        {
+            if (e.Changes.Any(change => change is RoleEnvironmentConfigurationSettingChange))
+                e.Cancel = true;
         }
     }
 }

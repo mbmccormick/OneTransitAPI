@@ -72,9 +72,9 @@ namespace OneTransitAPI.Transit
                         var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc)).ToLocalTime();
 
                         if (s["minutes"].ToString() == "Arrived")
-                            t.ArrivalTime = now.DateTime;
+                            t.ArrivalTime = now.DateTime.ToString("t");
                         else
-                            t.ArrivalTime = now.AddMinutes(Convert.ToInt32(s["minutes"].ToString().Trim())).DateTime;
+                            t.ArrivalTime = now.AddMinutes(Convert.ToInt32(s["minutes"].ToString().Trim())).DateTime.ToString("t");
                         
                         t.DepartureTime = t.ArrivalTime;
                         t.Type = 1;

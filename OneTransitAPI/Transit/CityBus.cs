@@ -47,12 +47,15 @@ namespace OneTransitAPI.Transit
             return result;
         }
 
-        public override List<StopTime> GetStopTimes(string stopID)
+        public override List<StopTime> GetStopTimes(string stopid)
         {
             System.Net.WebClient client = new System.Net.WebClient();
             
+            GTFS engine = new GTFS(this.TransitAgency);
+            Stop stop = engine.GetStop(stopid);
+
             DataSet ds = new DataSet();
-            ds.ReadXml(client.OpenRead("http://myride.gocitybus.com/widget/Default1.aspx?pt=30&code=" + stopID));
+            ds.ReadXml(client.OpenRead("http://myride.gocitybus.com/widget/Default1.aspx?pt=30&code=" + stop.Code));
 
             List<StopTime> result = new List<StopTime>();
 
@@ -72,12 +75,14 @@ namespace OneTransitAPI.Transit
                 var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc)).ToLocalTime();
                                 
                 if (r["TimeTillArrival"].ToString() == "DUE")
-                    t.ArrivalTime = now.DateTime;
+                    t.ArrivalTime = now.DateTime.ToString("t");
                 else
-                    t.ArrivalTime = now.AddMinutes(Convert.ToInt32(r["TimeTillArrival"].ToString().Replace("min", "").Trim())).DateTime;
+                    t.ArrivalTime = now.AddMinutes(Convert.ToInt32(r["TimeTillArrival"].ToString().Replace("min", "").Trim())).DateTime.ToString("t");
                 
                 t.DepartureTime = t.ArrivalTime;
                 t.Type = 1;
+
+                result.Add(t);
             }
 
             return result;
