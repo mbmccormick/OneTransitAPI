@@ -96,10 +96,12 @@ namespace BlobStorageEngine
                 {
                     configSetter(RoleEnvironment.GetConfigurationSettingValue(configName));
                 }
-                catch (RoleEnvironmentException e)
+                catch (RoleEnvironmentException ex)
                 {
-
-                    Trace.TraceError(e.Message);
+                    Utilities.LogEvent("BlobStorageEngine", "An unhandled exception has occurred. Message: " + ex.Message + "; " +
+                                                                                                 "Source: " + ex.Source + "; " +
+                                                                                                 "TargetSite: " + ex.TargetSite + "; " +
+                                                                                                 "StackTrace: " + ex.StackTrace + ";");
                     System.Threading.Thread.Sleep(5000);
                 }
             });
