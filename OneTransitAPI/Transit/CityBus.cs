@@ -72,7 +72,7 @@ namespace OneTransitAPI.Transit
                 t.RouteLongName = r["RouteName"].ToString().Replace(t.RouteShortName, "").Trim();
 
                 var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
-                var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc)).ToLocalTime();
+                var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
                                 
                 if (r["TimeTillArrival"].ToString() == "DUE")
                     t.ArrivalTime = now.DateTime.ToString("t");

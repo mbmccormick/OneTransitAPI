@@ -110,7 +110,7 @@ namespace OneTransitAPI.Transit
                         t.RouteLongName = r.Line;
 
                         var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
-                        var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc)).ToLocalTime();
+                        var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
 
                         if (r.Min.ToString() == "ARR" ||
                             r.Min.ToString() == "BRD")

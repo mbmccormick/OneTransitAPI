@@ -69,7 +69,7 @@ namespace OneTransitAPI.Transit
                         t.RouteLongName = r["destination"].ToString();
 
                         var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
-                        var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc)).ToLocalTime();
+                        var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
 
                         if (s["minutes"].ToString() == "Arrived")
                             t.ArrivalTime = now.DateTime.ToString("t");
