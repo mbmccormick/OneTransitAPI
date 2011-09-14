@@ -22,7 +22,21 @@ namespace OneTransitAPI
         public List<Agency> GetAgencies()
         {
             DatabaseDataContext db = new DatabaseDataContext();
-            return db.Agencies.OrderBy(a => a.Name).ToList<Agency>();
+
+            List<Agency> result = new List<Agency>();
+
+            foreach (var r in db.TransitAgencies)
+            {
+                Agency a = new Agency();
+                a.AgencyID = r.AgencyID;
+                a.Name = r.Name;
+                a.State = r.State;
+                a.TimeZone = r.TimeZone;
+
+                result.Add(a);
+            }
+
+            return result;
         }
 
         [OperationContract]
@@ -68,8 +82,8 @@ namespace OneTransitAPI
         private IWebService SelectWebService(string agencyid)
         {
             DatabaseDataContext db = new DatabaseDataContext();
-            var agency = (from a in db.Agencies where a.AgencyID == agencyid select a).Single();
-                        
+            var agency = new Agency((from a in db.TransitAgencies where a.AgencyID == agencyid select a).Single());
+
             IWebService webService;
             switch (agency.AgencyID)
             {

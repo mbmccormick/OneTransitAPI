@@ -77,7 +77,7 @@ namespace OneTransitAPI.Transit
                             t.ArrivalTime = now.AddMinutes(Convert.ToInt32(s["minutes"].ToString().Trim())).DateTime.ToString("t");
                         
                         t.DepartureTime = t.ArrivalTime;
-                        t.Type = 1;
+                        t.Type = "realtime";
 
                         if ((from x in result where x.RouteShortName == t.RouteShortName select x).Count() < 2)
                             result.Add(t);

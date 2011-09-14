@@ -80,7 +80,7 @@ namespace OneTransitAPI.Transit
                     t.ArrivalTime = now.AddMinutes(Convert.ToInt32(r["TimeTillArrival"].ToString().Replace("min", "").Trim())).DateTime.ToString("t");
                 
                 t.DepartureTime = t.ArrivalTime;
-                t.Type = 1;
+                t.Type = "realtime";
 
                 result.Add(t);
             }

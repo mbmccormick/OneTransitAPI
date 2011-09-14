@@ -80,13 +80,13 @@ namespace OneTransitAPI.Transit
                 {
                     t.ArrivalTime = Utilities.ConvertFromUnixTime(Convert.ToInt32(this.TransitAgency.TimeZone), r.predictedArrivalTime.ToString()).TimeOfDay;
                     t.DepartureTime = Utilities.ConvertFromUnixTime(Convert.ToInt32(this.TransitAgency.TimeZone), r.predictedDepartureTime.ToString()).TimeOfDay;
-                    t.Type = 1;
+                    t.Type = "realtime";
                 }
                 else
                 {
                     t.ArrivalTime = Utilities.ConvertFromUnixTime(Convert.ToInt32(this.TransitAgency.TimeZone), r.scheduledArrivalTime.ToString()).TimeOfDay;
                     t.DepartureTime = Utilities.ConvertFromUnixTime(Convert.ToInt32(this.TransitAgency.TimeZone), r.scheduledDepartureTime.ToString()).TimeOfDay;
-                    t.Type = 0;
+                    t.Type = "scheduled";
                 }
 
                 var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);

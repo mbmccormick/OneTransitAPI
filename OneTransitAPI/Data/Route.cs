@@ -10,6 +10,7 @@ namespace OneTransitAPI.Data
         public string ID { get; set; }
         public string ShortName { get; set; }
         public string LongName { get; set; }
+        public int Type { get; set; }
 
         public Route() { }
     }

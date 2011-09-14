@@ -41,6 +41,7 @@ namespace OneTransitAPI.Transit.Common
                 rt.ID = r.RouteID;
                 rt.ShortName = r.ShortName;
                 rt.LongName = r.LongName;
+                rt.Type = (int)r.RouteType;
 
                 result.Add(rt);
             }
@@ -140,7 +141,7 @@ namespace OneTransitAPI.Transit.Common
                 t.RouteLongName = r.Route.LongName;
                 t.ArrivalTime = now.Date.Add(r.StopTime.ArrivalTime).ToString("t");
                 t.DepartureTime = now.Date.Add(r.StopTime.DepartureTime).ToString("t");
-                t.Type = 0;
+                t.Type = "scheduled";
 
                 result.Add(t);
             }

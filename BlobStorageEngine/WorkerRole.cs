@@ -35,9 +35,9 @@ namespace BlobStorageEngine
                 try
                 {
                     DatabaseDataContext db = new DatabaseDataContext();
-                    var agencies = from a in db.Agencies orderby a.Name select a;
+                    var agencies = from a in db.TransitAgencies orderby a.Name select a;
 
-                    foreach (Agency a in agencies)
+                    foreach (TransitAgency a in agencies)
                     {
                         if (a.GTFSUrl == null ||
                             a.GTFSUrl.Length == 0)
