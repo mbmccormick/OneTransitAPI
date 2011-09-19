@@ -15,9 +15,9 @@ namespace OneTransitAPI.Data
 
         public Agency() { }
 
-        public Agency(TransitAgency a)
+        public Agency(GTFS_Agency a)
         {
-            this.AgencyID = a.AgencyID;
+            this.AgencyID = a.ID;
             this.Name = a.Name;
             this.State = a.State;
             this.TimeZone = a.TimeZone;

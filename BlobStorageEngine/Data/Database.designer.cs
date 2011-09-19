@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OneTransitAPI.Data
+namespace BlobStorageEngine.Data
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -33,9 +33,9 @@ namespace OneTransitAPI.Data
     partial void InsertGTFS_Agency(GTFS_Agency instance);
     partial void UpdateGTFS_Agency(GTFS_Agency instance);
     partial void DeleteGTFS_Agency(GTFS_Agency instance);
-    partial void InsertInformation(Information instance);
-    partial void UpdateInformation(Information instance);
-    partial void DeleteInformation(Information instance);
+    partial void InsertGTFS_Trip(GTFS_Trip instance);
+    partial void UpdateGTFS_Trip(GTFS_Trip instance);
+    partial void DeleteGTFS_Trip(GTFS_Trip instance);
     partial void InsertGTFS_Calendar(GTFS_Calendar instance);
     partial void UpdateGTFS_Calendar(GTFS_Calendar instance);
     partial void DeleteGTFS_Calendar(GTFS_Calendar instance);
@@ -48,16 +48,10 @@ namespace OneTransitAPI.Data
     partial void InsertGTFS_StopTime(GTFS_StopTime instance);
     partial void UpdateGTFS_StopTime(GTFS_StopTime instance);
     partial void DeleteGTFS_StopTime(GTFS_StopTime instance);
-    partial void InsertGTFS_Trip(GTFS_Trip instance);
-    partial void UpdateGTFS_Trip(GTFS_Trip instance);
-    partial void DeleteGTFS_Trip(GTFS_Trip instance);
-    partial void InsertConsumer(Consumer instance);
-    partial void UpdateConsumer(Consumer instance);
-    partial void DeleteConsumer(Consumer instance);
     #endregion
 		
 		public DatabaseDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["OneTransitAPIConnectionString"].ConnectionString, mappingSource)
+				base(global::BlobStorageEngine.Properties.Settings.Default.OneTransitAPIConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -94,11 +88,11 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		public System.Data.Linq.Table<Information> Informations
+		public System.Data.Linq.Table<GTFS_Trip> GTFS_Trips
 		{
 			get
 			{
-				return this.GetTable<Information>();
+				return this.GetTable<GTFS_Trip>();
 			}
 		}
 		
@@ -131,22 +125,6 @@ namespace OneTransitAPI.Data
 			get
 			{
 				return this.GetTable<GTFS_StopTime>();
-			}
-		}
-		
-		public System.Data.Linq.Table<GTFS_Trip> GTFS_Trips
-		{
-			get
-			{
-				return this.GetTable<GTFS_Trip>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Consumer> Consumers
-		{
-			get
-			{
-				return this.GetTable<Consumer>();
 			}
 		}
 	}
@@ -196,7 +174,7 @@ namespace OneTransitAPI.Data
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Guid RowKey
 		{
 			get
@@ -216,7 +194,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public System.Guid PartitionKey
 		{
 			get
@@ -236,7 +214,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(100) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
 		public string Name
 		{
 			get
@@ -256,7 +234,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_URL", DbType="VarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_URL", DbType="VarChar(500)", UpdateCheck=UpdateCheck.Never)]
 		public string URL
 		{
 			get
@@ -276,7 +254,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeZone", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeZone", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
 		public string TimeZone
 		{
 			get
@@ -296,7 +274,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_State", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_State", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
 		public string State
 		{
 			get
@@ -316,7 +294,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50)", UpdateCheck=UpdateCheck.Never)]
 		public string ID
 		{
 			get
@@ -357,37 +335,85 @@ namespace OneTransitAPI.Data
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Information")]
-	public partial class Information : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.GTFS_Trips")]
+	public partial class GTFS_Trip : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private int _ID;
+		private System.Guid _RowKey;
 		
-		private string _Message;
+		private System.Guid _PartitionKey;
 		
-		private System.DateTime _CreatedDate;
+		private string _ID;
+		
+		private string _RouteID;
+		
+		private string _ServiceID;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnIDChanging(int value);
+    partial void OnRowKeyChanging(System.Guid value);
+    partial void OnRowKeyChanged();
+    partial void OnPartitionKeyChanging(System.Guid value);
+    partial void OnPartitionKeyChanged();
+    partial void OnIDChanging(string value);
     partial void OnIDChanged();
-    partial void OnMessageChanging(string value);
-    partial void OnMessageChanged();
-    partial void OnCreatedDateChanging(System.DateTime value);
-    partial void OnCreatedDateChanged();
+    partial void OnRouteIDChanging(string value);
+    partial void OnRouteIDChanged();
+    partial void OnServiceIDChanging(string value);
+    partial void OnServiceIDChanged();
     #endregion
 		
-		public Information()
+		public GTFS_Trip()
 		{
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true, UpdateCheck=UpdateCheck.Never)]
+		public System.Guid RowKey
+		{
+			get
+			{
+				return this._RowKey;
+			}
+			set
+			{
+				if ((this._RowKey != value))
+				{
+					this.OnRowKeyChanging(value);
+					this.SendPropertyChanging();
+					this._RowKey = value;
+					this.SendPropertyChanged("RowKey");
+					this.OnRowKeyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public System.Guid PartitionKey
+		{
+			get
+			{
+				return this._PartitionKey;
+			}
+			set
+			{
+				if ((this._PartitionKey != value))
+				{
+					this.OnPartitionKeyChanging(value);
+					this.SendPropertyChanging();
+					this._PartitionKey = value;
+					this.SendPropertyChanged("PartitionKey");
+					this.OnPartitionKeyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public string ID
 		{
 			get
 			{
@@ -406,42 +432,42 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Message", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string Message
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RouteID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public string RouteID
 		{
 			get
 			{
-				return this._Message;
+				return this._RouteID;
 			}
 			set
 			{
-				if ((this._Message != value))
+				if ((this._RouteID != value))
 				{
-					this.OnMessageChanging(value);
+					this.OnRouteIDChanging(value);
 					this.SendPropertyChanging();
-					this._Message = value;
-					this.SendPropertyChanged("Message");
-					this.OnMessageChanged();
+					this._RouteID = value;
+					this.SendPropertyChanged("RouteID");
+					this.OnRouteIDChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
-		public System.DateTime CreatedDate
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public string ServiceID
 		{
 			get
 			{
-				return this._CreatedDate;
+				return this._ServiceID;
 			}
 			set
 			{
-				if ((this._CreatedDate != value))
+				if ((this._ServiceID != value))
 				{
-					this.OnCreatedDateChanging(value);
+					this.OnServiceIDChanging(value);
 					this.SendPropertyChanging();
-					this._CreatedDate = value;
-					this.SendPropertyChanged("CreatedDate");
-					this.OnCreatedDateChanged();
+					this._ServiceID = value;
+					this.SendPropertyChanged("ServiceID");
+					this.OnServiceIDChanged();
 				}
 			}
 		}
@@ -532,7 +558,7 @@ namespace OneTransitAPI.Data
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Guid RowKey
 		{
 			get
@@ -552,7 +578,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public System.Guid PartitionKey
 		{
 			get
@@ -572,7 +598,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
 		public string ServiceID
 		{
 			get
@@ -592,7 +618,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Monday", DbType="Bit NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Monday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public bool Monday
 		{
 			get
@@ -612,7 +638,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Tuesday", DbType="Bit NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Tuesday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public bool Tuesday
 		{
 			get
@@ -632,7 +658,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Wednesday", DbType="Bit NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Wednesday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public bool Wednesday
 		{
 			get
@@ -652,7 +678,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Thursday", DbType="Bit NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Thursday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public bool Thursday
 		{
 			get
@@ -672,7 +698,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Friday", DbType="Bit NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Friday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public bool Friday
 		{
 			get
@@ -692,7 +718,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Saturday", DbType="Bit NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Saturday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public bool Saturday
 		{
 			get
@@ -712,7 +738,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Sunday", DbType="Bit NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Sunday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public bool Sunday
 		{
 			get
@@ -732,7 +758,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="Date NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="Date NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public System.DateTime StartDate
 		{
 			get
@@ -752,7 +778,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="Date NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="Date NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public System.DateTime EndDate
 		{
 			get
@@ -834,7 +860,7 @@ namespace OneTransitAPI.Data
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Guid RowKey
 		{
 			get
@@ -854,7 +880,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public System.Guid PartitionKey
 		{
 			get
@@ -874,7 +900,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
 		public string ID
 		{
 			get
@@ -894,7 +920,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LongName", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LongName", DbType="VarChar(100) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
 		public string LongName
 		{
 			get
@@ -914,7 +940,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShortName", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShortName", DbType="VarChar(100) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
 		public string ShortName
 		{
 			get
@@ -934,7 +960,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Type", DbType="Int NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Type", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public int Type
 		{
 			get
@@ -1020,7 +1046,7 @@ namespace OneTransitAPI.Data
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Guid RowKey
 		{
 			get
@@ -1040,7 +1066,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public System.Guid PartitionKey
 		{
 			get
@@ -1060,7 +1086,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
 		public string ID
 		{
 			get
@@ -1080,7 +1106,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(100) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
 		public string Name
 		{
 			get
@@ -1100,7 +1126,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Code", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Code", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
 		public string Code
 		{
 			get
@@ -1120,7 +1146,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Latitude", DbType="Decimal(18,0) NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Latitude", DbType="Decimal(18,0) NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public decimal Latitude
 		{
 			get
@@ -1140,7 +1166,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Longitude", DbType="Decimal(18,0) NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Longitude", DbType="Decimal(18,0) NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public decimal Longitude
 		{
 			get
@@ -1226,7 +1252,7 @@ namespace OneTransitAPI.Data
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true, UpdateCheck=UpdateCheck.Never)]
 		public System.Guid RowKey
 		{
 			get
@@ -1246,7 +1272,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public System.Guid PartitionKey
 		{
 			get
@@ -1266,7 +1292,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StopID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StopID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
 		public string StopID
 		{
 			get
@@ -1286,7 +1312,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TripID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TripID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
 		public string TripID
 		{
 			get
@@ -1306,7 +1332,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArrivalTime", DbType="Time NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArrivalTime", DbType="Time NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public System.TimeSpan ArrivalTime
 		{
 			get
@@ -1326,7 +1352,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DepartureTime", DbType="Time NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DepartureTime", DbType="Time NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public System.TimeSpan DepartureTime
 		{
 			get
@@ -1346,7 +1372,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StopSequence", DbType="Int NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StopSequence", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public int StopSequence
 		{
 			get
@@ -1362,274 +1388,6 @@ namespace OneTransitAPI.Data
 					this._StopSequence = value;
 					this.SendPropertyChanged("StopSequence");
 					this.OnStopSequenceChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.GTFS_Trips")]
-	public partial class GTFS_Trip : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private System.Guid _RowKey;
-		
-		private System.Guid _PartitionKey;
-		
-		private string _ID;
-		
-		private string _RouteID;
-		
-		private string _ServiceID;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnRowKeyChanging(System.Guid value);
-    partial void OnRowKeyChanged();
-    partial void OnPartitionKeyChanging(System.Guid value);
-    partial void OnPartitionKeyChanged();
-    partial void OnIDChanging(string value);
-    partial void OnIDChanged();
-    partial void OnRouteIDChanging(string value);
-    partial void OnRouteIDChanged();
-    partial void OnServiceIDChanging(string value);
-    partial void OnServiceIDChanged();
-    #endregion
-		
-		public GTFS_Trip()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid RowKey
-		{
-			get
-			{
-				return this._RowKey;
-			}
-			set
-			{
-				if ((this._RowKey != value))
-				{
-					this.OnRowKeyChanging(value);
-					this.SendPropertyChanging();
-					this._RowKey = value;
-					this.SendPropertyChanged("RowKey");
-					this.OnRowKeyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
-		public System.Guid PartitionKey
-		{
-			get
-			{
-				return this._PartitionKey;
-			}
-			set
-			{
-				if ((this._PartitionKey != value))
-				{
-					this.OnPartitionKeyChanging(value);
-					this.SendPropertyChanging();
-					this._PartitionKey = value;
-					this.SendPropertyChanged("PartitionKey");
-					this.OnPartitionKeyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RouteID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string RouteID
-		{
-			get
-			{
-				return this._RouteID;
-			}
-			set
-			{
-				if ((this._RouteID != value))
-				{
-					this.OnRouteIDChanging(value);
-					this.SendPropertyChanging();
-					this._RouteID = value;
-					this.SendPropertyChanged("RouteID");
-					this.OnRouteIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string ServiceID
-		{
-			get
-			{
-				return this._ServiceID;
-			}
-			set
-			{
-				if ((this._ServiceID != value))
-				{
-					this.OnServiceIDChanging(value);
-					this.SendPropertyChanging();
-					this._ServiceID = value;
-					this.SendPropertyChanged("ServiceID");
-					this.OnServiceIDChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Consumers")]
-	public partial class Consumer : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private System.Guid _ConsumerKey;
-		
-		private string _EmailAddress;
-		
-		private string _CreatedDate;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnConsumerKeyChanging(System.Guid value);
-    partial void OnConsumerKeyChanged();
-    partial void OnEmailAddressChanging(string value);
-    partial void OnEmailAddressChanged();
-    partial void OnCreatedDateChanging(string value);
-    partial void OnCreatedDateChanged();
-    #endregion
-		
-		public Consumer()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConsumerKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid ConsumerKey
-		{
-			get
-			{
-				return this._ConsumerKey;
-			}
-			set
-			{
-				if ((this._ConsumerKey != value))
-				{
-					this.OnConsumerKeyChanging(value);
-					this.SendPropertyChanging();
-					this._ConsumerKey = value;
-					this.SendPropertyChanged("ConsumerKey");
-					this.OnConsumerKeyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmailAddress", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string EmailAddress
-		{
-			get
-			{
-				return this._EmailAddress;
-			}
-			set
-			{
-				if ((this._EmailAddress != value))
-				{
-					this.OnEmailAddressChanging(value);
-					this.SendPropertyChanging();
-					this._EmailAddress = value;
-					this.SendPropertyChanged("EmailAddress");
-					this.OnEmailAddressChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="NVarChar(15) NOT NULL", CanBeNull=false)]
-		public string CreatedDate
-		{
-			get
-			{
-				return this._CreatedDate;
-			}
-			set
-			{
-				if ((this._CreatedDate != value))
-				{
-					this.OnCreatedDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreatedDate = value;
-					this.SendPropertyChanged("CreatedDate");
-					this.OnCreatedDateChanged();
 				}
 			}
 		}

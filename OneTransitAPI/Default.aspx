@@ -31,27 +31,27 @@
                     a HTTP GET request. OneTransitAPI responds to all methods in JSON format.
                 </p>
                 <div class="method">
-                    <b>/v1/agencies/getList</b><br />
+                    <b>/v1/agencies/getList?key=[key]</b><br />
                     Get a list of transit agencies supported by this API.
                 </div>
                 <div class="method">
-                    <b>/v1/routes/getList?agency=[agencyid]</b><br />
+                    <b>/v1/routes/getList?key=[key]&agency=[agencyid]</b><br />
                     Get a list of routes for a specific transit agency.
                 </div>
                 <div class="method">
-                    <b>/v1/stops/getInfo?agency=[agencyid]&stop=[stopid]</b><br />
+                    <b>/v1/stops/getInfo?key=[key]&agency=[agencyid]&stop=[stopid]</b><br />
                     Get information for a specific stop.
                 </div>
                 <div class="method">
-                    <b>/v1/stops/getList?agency=[agencyid]</b><br />
+                    <b>/v1/stops/getList?key=[key]&agency=[agencyid]</b><br />
                     Get a list of stops for a specific transit agency.
                 </div>
                 <div class="method">
-                    <b>/v1/stops/getListByLocation?agency=[agencyid]&lat=[latitude]&lon=[longitude]&radius=[radius]</b><br />
+                    <b>/v1/stops/getListByLocation?key=[key]&agency=[agencyid]&lat=[latitude]&lon=[longitude]&radius=[radius]</b><br />
                     Get a list of stops for a specific transit agency by location.
                 </div>
                 <div class="method">
-                    <b>/v1/stops/getTimes?agency=[agencyid]&stop=[stopid]</b><br />
+                    <b>/v1/stops/getTimes?key=[key]&agency=[agencyid]&stop=[stopid]</b><br />
                     Get a list of times for a specific stop.
                 </div>
             </div>

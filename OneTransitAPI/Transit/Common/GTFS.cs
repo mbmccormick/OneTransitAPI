@@ -26,9 +26,7 @@ namespace OneTransitAPI.Transit.Common
 
             CloudBlobContainer container = blobStorage.GetContainerReference("gtfs");
 
-            AzureStorageSourceDataCollection data = new AzureStorageSourceDataCollection(container, transitAgency.AgencyID.ToLower());
-
-            gtfsEngine = new Engine(data);
+            gtfsEngine = new Engine(new AzureStorageSourceDataCollection(container, transitAgency.AgencyID.ToLower()));
         }
 
         public override List<Route> GetRoutes()
