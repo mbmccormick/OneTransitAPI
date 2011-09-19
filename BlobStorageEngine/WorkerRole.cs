@@ -139,7 +139,7 @@ namespace BlobStorageEngine
                             db.GTFS_Routes.InsertOnSubmit(data);
                         }
 
-                        Utilities.LogEvent("BlobStorageEngine", "Uploading to GTFS_Stops.");
+                        Utilities.LogEvent("BlobStorageEngine", "Queuing records for GTFS_Stops.");
                         foreach (Stop s in gtfsEngine.Stops)
                         {
                             GTFS_Stop data = new GTFS_Stop();
