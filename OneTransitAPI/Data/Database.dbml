@@ -57,7 +57,7 @@
       <Column Name="PartitionKey" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
       <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="Code" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="Latitude" Type="System.Decimal" DbType="Decimal(18,15) NOT NULL" CanBeNull="false" />
       <Column Name="Longitude" Type="System.Decimal" DbType="Decimal(18,15) NOT NULL" CanBeNull="false" />
     </Type>

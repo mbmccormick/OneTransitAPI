@@ -26,16 +26,16 @@
         <elementListCompartment Id="4189d485-e9aa-4717-a023-2522318d6182" absoluteBounds="3.765, 4.21, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="8645efda-06cc-48b4-9736-3737290cd7e3" absoluteBounds="6.75, 0.75, 2, 2.1554996744791666">
-      <DataClassMoniker Name="/DatabaseDataContext/GTFS_Stop" />
-      <nestedChildShapes>
-        <elementListCompartment Id="4aca980d-c132-479c-af94-4754fd8a9ea6" absoluteBounds="6.765, 1.21, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
     <classShape Id="83a1bcd1-8f18-4ec7-942c-44d1067edbde" absoluteBounds="6.75, 3.75, 2, 2.1554996744791666">
       <DataClassMoniker Name="/DatabaseDataContext/GTFS_StopTime" />
       <nestedChildShapes>
         <elementListCompartment Id="5aa38b79-d2ec-4702-9706-7cf4104e299d" absoluteBounds="6.765, 4.21, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b6105f1c-c622-47fc-9c1b-da62a3a1a2f9" absoluteBounds="6.75, 0.75, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/DatabaseDataContext/GTFS_Stop" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c6ffc4fd-56f3-49a2-8288-b5239f4e715f" absoluteBounds="6.7650000000000006, 1.21, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

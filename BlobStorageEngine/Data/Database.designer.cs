@@ -42,16 +42,16 @@ namespace BlobStorageEngine.Data
     partial void InsertGTFS_Route(GTFS_Route instance);
     partial void UpdateGTFS_Route(GTFS_Route instance);
     partial void DeleteGTFS_Route(GTFS_Route instance);
-    partial void InsertGTFS_Stop(GTFS_Stop instance);
-    partial void UpdateGTFS_Stop(GTFS_Stop instance);
-    partial void DeleteGTFS_Stop(GTFS_Stop instance);
     partial void InsertGTFS_StopTime(GTFS_StopTime instance);
     partial void UpdateGTFS_StopTime(GTFS_StopTime instance);
     partial void DeleteGTFS_StopTime(GTFS_StopTime instance);
+    partial void InsertGTFS_Stop(GTFS_Stop instance);
+    partial void UpdateGTFS_Stop(GTFS_Stop instance);
+    partial void DeleteGTFS_Stop(GTFS_Stop instance);
     #endregion
 		
 		public DatabaseDataContext() : 
-				base(global::BlobStorageEngine.Properties.Settings.Default.OneTransitAPIConnectionString, mappingSource)
+				base(global::BlobStorageEngine.Properties.Settings.Default.OneTransitAPIConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -112,19 +112,19 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		public System.Data.Linq.Table<GTFS_Stop> GTFS_Stops
-		{
-			get
-			{
-				return this.GetTable<GTFS_Stop>();
-			}
-		}
-		
 		public System.Data.Linq.Table<GTFS_StopTime> GTFS_StopTimes
 		{
 			get
 			{
 				return this.GetTable<GTFS_StopTime>();
+			}
+		}
+		
+		public System.Data.Linq.Table<GTFS_Stop> GTFS_Stops
+		{
+			get
+			{
+				return this.GetTable<GTFS_Stop>();
 			}
 		}
 		
@@ -1036,212 +1036,6 @@ namespace BlobStorageEngine.Data
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.GTFS_Stops")]
-	public partial class GTFS_Stop : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private System.Guid _RowKey;
-		
-		private System.Guid _PartitionKey;
-		
-		private string _ID;
-		
-		private string _Name;
-		
-		private string _Code;
-		
-		private decimal _Latitude;
-		
-		private decimal _Longitude;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnRowKeyChanging(System.Guid value);
-    partial void OnRowKeyChanged();
-    partial void OnPartitionKeyChanging(System.Guid value);
-    partial void OnPartitionKeyChanged();
-    partial void OnIDChanging(string value);
-    partial void OnIDChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnCodeChanging(string value);
-    partial void OnCodeChanged();
-    partial void OnLatitudeChanging(decimal value);
-    partial void OnLatitudeChanged();
-    partial void OnLongitudeChanging(decimal value);
-    partial void OnLongitudeChanged();
-    #endregion
-		
-		public GTFS_Stop()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid RowKey
-		{
-			get
-			{
-				return this._RowKey;
-			}
-			set
-			{
-				if ((this._RowKey != value))
-				{
-					this.OnRowKeyChanging(value);
-					this.SendPropertyChanging();
-					this._RowKey = value;
-					this.SendPropertyChanged("RowKey");
-					this.OnRowKeyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
-		public System.Guid PartitionKey
-		{
-			get
-			{
-				return this._PartitionKey;
-			}
-			set
-			{
-				if ((this._PartitionKey != value))
-				{
-					this.OnPartitionKeyChanging(value);
-					this.SendPropertyChanging();
-					this._PartitionKey = value;
-					this.SendPropertyChanged("PartitionKey");
-					this.OnPartitionKeyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Code", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string Code
-		{
-			get
-			{
-				return this._Code;
-			}
-			set
-			{
-				if ((this._Code != value))
-				{
-					this.OnCodeChanging(value);
-					this.SendPropertyChanging();
-					this._Code = value;
-					this.SendPropertyChanged("Code");
-					this.OnCodeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Latitude", DbType="Decimal(18,15) NOT NULL")]
-		public decimal Latitude
-		{
-			get
-			{
-				return this._Latitude;
-			}
-			set
-			{
-				if ((this._Latitude != value))
-				{
-					this.OnLatitudeChanging(value);
-					this.SendPropertyChanging();
-					this._Latitude = value;
-					this.SendPropertyChanged("Latitude");
-					this.OnLatitudeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Longitude", DbType="Decimal(18,15) NOT NULL")]
-		public decimal Longitude
-		{
-			get
-			{
-				return this._Longitude;
-			}
-			set
-			{
-				if ((this._Longitude != value))
-				{
-					this.OnLongitudeChanging(value);
-					this.SendPropertyChanging();
-					this._Longitude = value;
-					this.SendPropertyChanged("Longitude");
-					this.OnLongitudeChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.GTFS_StopTimes")]
 	public partial class GTFS_StopTime : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -1423,6 +1217,212 @@ namespace BlobStorageEngine.Data
 					this._StopSequence = value;
 					this.SendPropertyChanged("StopSequence");
 					this.OnStopSequenceChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.GTFS_Stops")]
+	public partial class GTFS_Stop : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _RowKey;
+		
+		private System.Guid _PartitionKey;
+		
+		private string _ID;
+		
+		private string _Name;
+		
+		private string _Code;
+		
+		private decimal _Latitude;
+		
+		private decimal _Longitude;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnRowKeyChanging(System.Guid value);
+    partial void OnRowKeyChanged();
+    partial void OnPartitionKeyChanging(System.Guid value);
+    partial void OnPartitionKeyChanged();
+    partial void OnIDChanging(string value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnCodeChanging(string value);
+    partial void OnCodeChanged();
+    partial void OnLatitudeChanging(decimal value);
+    partial void OnLatitudeChanged();
+    partial void OnLongitudeChanging(decimal value);
+    partial void OnLongitudeChanged();
+    #endregion
+		
+		public GTFS_Stop()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid RowKey
+		{
+			get
+			{
+				return this._RowKey;
+			}
+			set
+			{
+				if ((this._RowKey != value))
+				{
+					this.OnRowKeyChanging(value);
+					this.SendPropertyChanging();
+					this._RowKey = value;
+					this.SendPropertyChanged("RowKey");
+					this.OnRowKeyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid PartitionKey
+		{
+			get
+			{
+				return this._PartitionKey;
+			}
+			set
+			{
+				if ((this._PartitionKey != value))
+				{
+					this.OnPartitionKeyChanging(value);
+					this.SendPropertyChanging();
+					this._PartitionKey = value;
+					this.SendPropertyChanged("PartitionKey");
+					this.OnPartitionKeyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Code", DbType="VarChar(50)")]
+		public string Code
+		{
+			get
+			{
+				return this._Code;
+			}
+			set
+			{
+				if ((this._Code != value))
+				{
+					this.OnCodeChanging(value);
+					this.SendPropertyChanging();
+					this._Code = value;
+					this.SendPropertyChanged("Code");
+					this.OnCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Latitude", DbType="Decimal(18,15) NOT NULL")]
+		public decimal Latitude
+		{
+			get
+			{
+				return this._Latitude;
+			}
+			set
+			{
+				if ((this._Latitude != value))
+				{
+					this.OnLatitudeChanging(value);
+					this.SendPropertyChanging();
+					this._Latitude = value;
+					this.SendPropertyChanged("Latitude");
+					this.OnLatitudeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Longitude", DbType="Decimal(18,15) NOT NULL")]
+		public decimal Longitude
+		{
+			get
+			{
+				return this._Longitude;
+			}
+			set
+			{
+				if ((this._Longitude != value))
+				{
+					this.OnLongitudeChanging(value);
+					this.SendPropertyChanging();
+					this._Longitude = value;
+					this.SendPropertyChanged("Longitude");
+					this.OnLongitudeChanged();
 				}
 			}
 		}

@@ -57,7 +57,7 @@ namespace OneTransitAPI.Data
     #endregion
 		
 		public DatabaseDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["OneTransitAPIConnectionString"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["OneTransitAPIConnectionString1"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -1217,7 +1217,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Code", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Code", DbType="VarChar(50)")]
 		public string Code
 		{
 			get
