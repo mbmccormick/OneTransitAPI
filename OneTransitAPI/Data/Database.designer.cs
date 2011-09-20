@@ -57,7 +57,7 @@ namespace OneTransitAPI.Data
     #endregion
 		
 		public DatabaseDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["OneTransitAPIConnectionString1"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["OneTransitAPIConnectionString"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
