@@ -14,32 +14,28 @@ namespace OneTransitAPI.Transit.Common
 {
     public class GTFS : IWebService
     {
-        private Engine gtfsEngine;
+        private DatabaseDataContext db;
+        private GTFS_Agency agency;
 
         public GTFS(Agency transitAgency) : base(transitAgency)
         {
-            StorageCredentialsAccountAndKey storageCredentialsAccountAndKey = new StorageCredentialsAccountAndKey(ConfigurationManager.AppSettings["AzureStorageAccount"], ConfigurationManager.AppSettings["AzureStorageKey"]);
-            CloudStorageAccount acct = new CloudStorageAccount(storageCredentialsAccountAndKey, true);
-            
-            CloudBlobClient blobStorage = acct.CreateCloudBlobClient();
-            blobStorage.ParallelOperationThreadCount = 1;
+            db = new DatabaseDataContext();
 
-            CloudBlobContainer container = blobStorage.GetContainerReference("gtfs");
-
-            gtfsEngine = new Engine(new AzureStorageSourceDataCollection(container, transitAgency.AgencyID.ToLower()));
+            agency = (from a in db.GTFS_Agencies where a.ID == transitAgency.AgencyID select a).Single();
         }
 
         public override List<Route> GetRoutes()
         {
             List<Route> result = new List<Route>();
 
-            foreach (var r in gtfsEngine.Routes)
+            var routes = from r in db.GTFS_Routes where r.PartitionKey == agency.PartitionKey select r;
+            foreach (var r in routes)
             {
                 Route rt = new Route();
-                rt.ID = r.RouteID;
+                rt.ID = r.ID;
                 rt.ShortName = r.ShortName;
                 rt.LongName = r.LongName;
-                rt.Type = (int)r.RouteType;
+                rt.Type = (int)r.Type;
 
                 result.Add(rt);
             }
@@ -49,14 +45,14 @@ namespace OneTransitAPI.Transit.Common
 
         public override Stop GetStop(string stopid)
         {
-            var r = (from s in gtfsEngine.Stops where s.ID.ToUpper() == stopid.ToUpper() select s).Single();
+            var stop = (from s in db.GTFS_Stops where s.ID.ToUpper() == stopid.ToUpper() select s).Single();
 
             Stop result = new Stop();
-            result.ID = r.ID;
-            result.Name = r.Name;
-            result.Code = r.Code;
-            result.Latitude = Convert.ToDouble(r.Lat);
-            result.Longitude = Convert.ToDouble(r.Lon);
+            result.ID = stop.ID;
+            result.Name = stop.Name;
+            result.Code = stop.Code;
+            result.Latitude = Convert.ToDouble(stop.Latitude);
+            result.Longitude = Convert.ToDouble(stop.Longitude);
 
             return result;
         }
@@ -65,16 +61,17 @@ namespace OneTransitAPI.Transit.Common
         {
             List<Stop> result = new List<Stop>();
 
-            foreach (var r in gtfsEngine.Stops)
+            var stops = from s in db.GTFS_Stops where s.PartitionKey == agency.PartitionKey select s;
+            foreach (var s in stops)
             {
-                Stop s = new Stop();
-                s.ID = r.ID;
-                s.Name = r.Name;
-                s.Code = r.Code;
-                s.Latitude = Convert.ToDouble(r.Lat);
-                s.Longitude = Convert.ToDouble(r.Lon);
+                Stop st = new Stop();
+                st.ID = s.ID;
+                st.Name = s.Name;
+                st.Code = s.Code;
+                st.Latitude = Convert.ToDouble(s.Latitude);
+                st.Longitude = Convert.ToDouble(s.Longitude);
 
-                result.Add(s);
+                result.Add(st);
             }
 
             return result;
@@ -84,18 +81,19 @@ namespace OneTransitAPI.Transit.Common
         {
             List<Stop> result = new List<Stop>();
 
-            foreach (var r in gtfsEngine.Stops)
+            var stops = from s in db.GTFS_Stops where s.PartitionKey == agency.PartitionKey select s;
+            foreach (var s in stops)
             {
-                if (Utilities.Distance(latitude, longitude, Convert.ToDouble(r.Lat), Convert.ToDouble(r.Lon)) <= radius)
+                if (Utilities.Distance(latitude, longitude, Convert.ToDouble(s.Latitude), Convert.ToDouble(s.Longitude)) <= radius)
                 {
-                    Stop s = new Stop();
-                    s.ID = r.ID;
-                    s.Name = r.Name;
-                    s.Code = r.Code;
-                    s.Latitude = Convert.ToDouble(r.Lat);
-                    s.Longitude = Convert.ToDouble(r.Lon);
+                    Stop st = new Stop();
+                    st.ID = s.ID;
+                    st.Name = s.Name;
+                    st.Code = s.Code;
+                    st.Latitude = Convert.ToDouble(s.Latitude);
+                    st.Longitude = Convert.ToDouble(s.Longitude);
 
-                    result.Add(s);
+                    result.Add(st);
                 }
             }
 
@@ -109,36 +107,18 @@ namespace OneTransitAPI.Transit.Common
             var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
             var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
 
-            var tod0 = now.TimeOfDay;
-            var tod1 = now.AddHours(2).TimeOfDay;
-            
-            var stopTimes = from s in gtfsEngine.Stop_Times
-                            where s.StopID.ToUpper() == stopid.ToUpper() &&
-                                  s.DepartureTime >= tod0 &&
-                                  s.DepartureTime < tod1
-                            select s;
+            var tod0 = now.DateTime;
+            var tod1 = now.AddHours(2).DateTime;
 
-            var trips = gtfsEngine.Trips.ToDictionary(t => t.TripID);
-            var routes = gtfsEngine.Routes.ToDictionary(r => r.RouteID);
-            
-            var query = from StopTime in stopTimes
-                        let Trip = trips[StopTime.TripID]
-                        let Route = routes[Trip.RouteID]
-                        orderby StopTime.DepartureTime
-                        select new
-                        {
-                            StopTime,
-                            Trip,
-                            Route
-                        };
+            var stopTimes = db.GetStopTimes(tod0, tod1, agency.PartitionKey, stopid);
 
-            foreach (var r in query)
+            foreach (var r in stopTimes)
             {
                 StopTime t = new StopTime();
-                t.RouteShortName = r.Route.ShortName;
-                t.RouteLongName = r.Route.LongName;
-                t.ArrivalTime = now.Date.Add(r.StopTime.ArrivalTime).ToString("t");
-                t.DepartureTime = now.Date.Add(r.StopTime.DepartureTime).ToString("t");
+                t.RouteShortName = r.ShortName;
+                t.RouteLongName = r.LongName;
+                t.ArrivalTime = r.ArrivalTime.ToString("hh:mm tt");
+                t.DepartureTime = r.DepartureTime.ToString("hh:mm tt");
                 t.Type = "scheduled";
 
                 result.Add(t);

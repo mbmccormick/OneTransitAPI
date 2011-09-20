@@ -60,7 +60,8 @@
                 <b>Authentication</b>
                 <p>
                     All API consumers will need to provide an API key in order to access this web service.
-                    You can register for an API key <a href="Register.aspx">here</a>.</p>
+                    You can register for an API key <a href="Register.aspx">here</a>. All activity is
+                    logged and your access to this API is subject to our terms of service.</p>
             </div>
         </div>
         <div id="footer">

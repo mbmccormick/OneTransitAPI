@@ -75,9 +75,9 @@ namespace OneTransitAPI.Transit
                 var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
                                 
                 if (r["TimeTillArrival"].ToString() == "DUE")
-                    t.ArrivalTime = now.DateTime.ToString("t");
+                    t.ArrivalTime = now.DateTime.ToString("hh:mm tt");
                 else
-                    t.ArrivalTime = now.AddMinutes(Convert.ToInt32(r["TimeTillArrival"].ToString().Replace("min", "").Trim())).DateTime.ToString("t");
+                    t.ArrivalTime = now.AddMinutes(Convert.ToInt32(r["TimeTillArrival"].ToString().Replace("min", "").Trim())).DateTime.ToString("hh:mm tt");
                 
                 t.DepartureTime = t.ArrivalTime;
                 t.Type = "realtime";

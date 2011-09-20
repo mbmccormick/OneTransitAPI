@@ -51,7 +51,7 @@ namespace BlobStorageEngine.Data
     #endregion
 		
 		public DatabaseDataContext() : 
-				base(global::BlobStorageEngine.Properties.Settings.Default.OneTransitAPIConnectionString1, mappingSource)
+				base(global::BlobStorageEngine.Properties.Settings.Default.OneTransitAPIConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -129,37 +129,37 @@ namespace BlobStorageEngine.Data
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.InsertCalendars")]
-		public int InsertCalendars([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> partitionKey)
+		public int InsertCalendars([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="NewPartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> newPartitionKey, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="OldPartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> oldPartitionKey)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, partitionKey);
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, newPartitionKey, oldPartitionKey);
 			return ((int)(result.ReturnValue));
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.InsertTrips")]
-		public int InsertTrips([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> partitionKey)
+		public int InsertTrips([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="NewPartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> newPartitionKey, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="OldPartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> oldPartitionKey)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, partitionKey);
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, newPartitionKey, oldPartitionKey);
 			return ((int)(result.ReturnValue));
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.InsertRoutes")]
-		public int InsertRoutes([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> partitionKey)
+		public int InsertRoutes([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="NewPartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> newPartitionKey, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="OldPartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> oldPartitionKey)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, partitionKey);
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, newPartitionKey, oldPartitionKey);
 			return ((int)(result.ReturnValue));
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.InsertStops")]
-		public int InsertStops([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> partitionKey)
+		public int InsertStops([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="NewPartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> newPartitionKey, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="OldPartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> oldPartitionKey)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, partitionKey);
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, newPartitionKey, oldPartitionKey);
 			return ((int)(result.ReturnValue));
 		}
 		
 		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.InsertStopTimes")]
-		public int InsertStopTimes([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> partitionKey)
+		public int InsertStopTimes([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="NewPartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> newPartitionKey, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="OldPartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> oldPartitionKey)
 		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, partitionKey);
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, newPartitionKey, oldPartitionKey);
 			return ((int)(result.ReturnValue));
 		}
 	}
@@ -209,7 +209,7 @@ namespace BlobStorageEngine.Data
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
 		public System.Guid RowKey
 		{
 			get
@@ -229,7 +229,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
 		public System.Guid PartitionKey
 		{
 			get
@@ -249,7 +249,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(100) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
 		public string Name
 		{
 			get
@@ -269,7 +269,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_URL", DbType="VarChar(500)", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_URL", DbType="VarChar(500)")]
 		public string URL
 		{
 			get
@@ -289,7 +289,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeZone", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TimeZone", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string TimeZone
 		{
 			get
@@ -309,7 +309,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_State", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_State", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string State
 		{
 			get
@@ -329,7 +329,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50)", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50)")]
 		public string ID
 		{
 			get
@@ -407,7 +407,7 @@ namespace BlobStorageEngine.Data
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
 		public System.Guid RowKey
 		{
 			get
@@ -427,7 +427,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
 		public System.Guid PartitionKey
 		{
 			get
@@ -447,7 +447,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string ID
 		{
 			get
@@ -467,7 +467,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RouteID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RouteID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string RouteID
 		{
 			get
@@ -487,7 +487,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string ServiceID
 		{
 			get
@@ -593,7 +593,7 @@ namespace BlobStorageEngine.Data
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
 		public System.Guid RowKey
 		{
 			get
@@ -613,7 +613,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
 		public System.Guid PartitionKey
 		{
 			get
@@ -633,7 +633,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string ServiceID
 		{
 			get
@@ -653,7 +653,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Monday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Monday", DbType="Bit NOT NULL")]
 		public bool Monday
 		{
 			get
@@ -673,7 +673,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Tuesday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Tuesday", DbType="Bit NOT NULL")]
 		public bool Tuesday
 		{
 			get
@@ -693,7 +693,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Wednesday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Wednesday", DbType="Bit NOT NULL")]
 		public bool Wednesday
 		{
 			get
@@ -713,7 +713,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Thursday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Thursday", DbType="Bit NOT NULL")]
 		public bool Thursday
 		{
 			get
@@ -733,7 +733,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Friday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Friday", DbType="Bit NOT NULL")]
 		public bool Friday
 		{
 			get
@@ -753,7 +753,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Saturday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Saturday", DbType="Bit NOT NULL")]
 		public bool Saturday
 		{
 			get
@@ -773,7 +773,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Sunday", DbType="Bit NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Sunday", DbType="Bit NOT NULL")]
 		public bool Sunday
 		{
 			get
@@ -793,7 +793,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="Date NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="Date NOT NULL")]
 		public System.DateTime StartDate
 		{
 			get
@@ -813,7 +813,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="Date NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="Date NOT NULL")]
 		public System.DateTime EndDate
 		{
 			get
@@ -895,7 +895,7 @@ namespace BlobStorageEngine.Data
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
 		public System.Guid RowKey
 		{
 			get
@@ -915,7 +915,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
 		public System.Guid PartitionKey
 		{
 			get
@@ -935,7 +935,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string ID
 		{
 			get
@@ -955,7 +955,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LongName", DbType="VarChar(100) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LongName", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
 		public string LongName
 		{
 			get
@@ -975,7 +975,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShortName", DbType="VarChar(100) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShortName", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
 		public string ShortName
 		{
 			get
@@ -995,7 +995,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Type", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Type", DbType="Int NOT NULL")]
 		public int Type
 		{
 			get
@@ -1081,7 +1081,7 @@ namespace BlobStorageEngine.Data
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
 		public System.Guid RowKey
 		{
 			get
@@ -1101,7 +1101,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
 		public System.Guid PartitionKey
 		{
 			get
@@ -1121,7 +1121,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string ID
 		{
 			get
@@ -1141,7 +1141,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(100) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
 		public string Name
 		{
 			get
@@ -1161,7 +1161,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Code", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Code", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string Code
 		{
 			get
@@ -1181,7 +1181,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Latitude", DbType="Decimal(18,15) NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Latitude", DbType="Decimal(18,15) NOT NULL")]
 		public decimal Latitude
 		{
 			get
@@ -1201,7 +1201,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Longitude", DbType="Decimal(18,15) NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Longitude", DbType="Decimal(18,15) NOT NULL")]
 		public decimal Longitude
 		{
 			get
@@ -1287,7 +1287,7 @@ namespace BlobStorageEngine.Data
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RowKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
 		public System.Guid RowKey
 		{
 			get
@@ -1307,7 +1307,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
 		public System.Guid PartitionKey
 		{
 			get
@@ -1327,7 +1327,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StopID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StopID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string StopID
 		{
 			get
@@ -1347,7 +1347,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TripID", DbType="VarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TripID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
 		public string TripID
 		{
 			get
@@ -1367,7 +1367,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArrivalTime", DbType="DateTime NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArrivalTime", DbType="DateTime NOT NULL")]
 		public System.DateTime ArrivalTime
 		{
 			get
@@ -1387,7 +1387,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DepartureTime", DbType="DateTime NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DepartureTime", DbType="DateTime NOT NULL")]
 		public System.DateTime DepartureTime
 		{
 			get
@@ -1407,7 +1407,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StopSequence", DbType="Int NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StopSequence", DbType="Int NOT NULL")]
 		public int StopSequence
 		{
 			get

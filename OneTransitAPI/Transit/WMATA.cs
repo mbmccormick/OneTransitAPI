@@ -114,9 +114,9 @@ namespace OneTransitAPI.Transit
 
                         if (r.Min.ToString() == "ARR" ||
                             r.Min.ToString() == "BRD")
-                            t.ArrivalTime = now.DateTime.ToString("t");
+                            t.ArrivalTime = now.DateTime.ToString("hh:mm tt");
                         else
-                            t.ArrivalTime = now.AddMinutes(Convert.ToInt32(r.Min.ToString())).DateTime.ToString("t");
+                            t.ArrivalTime = now.AddMinutes(Convert.ToInt32(r.Min.ToString())).DateTime.ToString("hh:mm tt");
                         
                         t.DepartureTime = t.ArrivalTime;
                         t.Type = "realtime";

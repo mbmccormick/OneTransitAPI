@@ -19,9 +19,7 @@
         <div id="content">
             <div class="introduction">
                 OneTransit is a simple service that makes it easy to access real-time public transit
-                data for over 175 transit agencies. Data is pulled from hundreds of web services
-                to provide real-time data when available. When real-time data is not available,
-                OneTransitAPI delivers scheduled data, which is updated every 72 hours.
+                data for over 175 transit agencies.
             </div>
             <br />
             <div class="registration">
@@ -31,13 +29,26 @@
                     Use the form below to register your application for an API key. The API key will
                     be sent to the email address that you provide.
                 </p>
-                <b>Email Address</b>
-                <br />
                 <asp:TextBox ID="txtEmailAddress" runat="server"></asp:TextBox>
-                <br />
-                <br />
-                <asp:Button ID="btnSubmit" runat="server" UseSubmitBehavior="true" />
+                <asp:Button ID="btnSubmit" runat="server" UseSubmitBehavior="true" Text="Register"
+                    OnClick="btnSubmit_Click" />
                 </form>
+                <br />
+                <b>Terms of Service</b>
+                <p>
+                    We (the folks at McCormick Technologies) run a public transit API service called
+                    OneTransitAPI.com and would love for you to use it. Our basic service is free, and
+                    we offer paid upgrades for advanced features such as high-bandwidth transactions
+                    and analytics. Our service is designed to give you the most up-to-date information
+                    as possible and encourage you to devlop unique and innovative applications. However,
+                    be responsible in what you create.</p>
+                <p>
+                    (Note, we’ve copied this Terms of Service under a Creative Commons Sharealike license
+                    from WordPress.com, which means you’re more than welcome to steal it and repurpose
+                    it for your own use, just make sure to replace references to us with ones to you,
+                    and if you want we’d appreciate a link to WordPress.com somewhere on your site.
+                    They spent a lot of money and time on this, and other people shouldn’t need to do
+                    the same.)</p>
             </div>
         </div>
         <div id="footer">

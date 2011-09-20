@@ -30,12 +30,15 @@ namespace OneTransitAPI.Data
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertGTFS_Agency(GTFS_Agency instance);
-    partial void UpdateGTFS_Agency(GTFS_Agency instance);
-    partial void DeleteGTFS_Agency(GTFS_Agency instance);
+    partial void InsertConsumer(Consumer instance);
+    partial void UpdateConsumer(Consumer instance);
+    partial void DeleteConsumer(Consumer instance);
     partial void InsertInformation(Information instance);
     partial void UpdateInformation(Information instance);
     partial void DeleteInformation(Information instance);
+    partial void InsertGTFS_Agency(GTFS_Agency instance);
+    partial void UpdateGTFS_Agency(GTFS_Agency instance);
+    partial void DeleteGTFS_Agency(GTFS_Agency instance);
     partial void InsertGTFS_Calendar(GTFS_Calendar instance);
     partial void UpdateGTFS_Calendar(GTFS_Calendar instance);
     partial void DeleteGTFS_Calendar(GTFS_Calendar instance);
@@ -51,13 +54,10 @@ namespace OneTransitAPI.Data
     partial void InsertGTFS_Trip(GTFS_Trip instance);
     partial void UpdateGTFS_Trip(GTFS_Trip instance);
     partial void DeleteGTFS_Trip(GTFS_Trip instance);
-    partial void InsertConsumer(Consumer instance);
-    partial void UpdateConsumer(Consumer instance);
-    partial void DeleteConsumer(Consumer instance);
     #endregion
 		
 		public DatabaseDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["OneTransitAPIConnectionString"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["OneTransitAPIConnectionString1"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -86,11 +86,11 @@ namespace OneTransitAPI.Data
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<GTFS_Agency> GTFS_Agencies
+		public System.Data.Linq.Table<Consumer> Consumers
 		{
 			get
 			{
-				return this.GetTable<GTFS_Agency>();
+				return this.GetTable<Consumer>();
 			}
 		}
 		
@@ -99,6 +99,14 @@ namespace OneTransitAPI.Data
 			get
 			{
 				return this.GetTable<Information>();
+			}
+		}
+		
+		public System.Data.Linq.Table<GTFS_Agency> GTFS_Agencies
+		{
+			get
+			{
+				return this.GetTable<GTFS_Agency>();
 			}
 		}
 		
@@ -142,11 +150,230 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		public System.Data.Linq.Table<Consumer> Consumers
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.GetStopTimes")]
+		public ISingleResult<GetStopTimesResult> GetStopTimes([global::System.Data.Linq.Mapping.ParameterAttribute(Name="StartTime", DbType="DateTime")] System.Nullable<System.DateTime> startTime, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="EndTime", DbType="DateTime")] System.Nullable<System.DateTime> endTime, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> partitionKey, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="StopID", DbType="VarChar(50)")] string stopID)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), startTime, endTime, partitionKey, stopID);
+			return ((ISingleResult<GetStopTimesResult>)(result.ReturnValue));
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Consumers")]
+	public partial class Consumer : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _ConsumerKey;
+		
+		private string _EmailAddress;
+		
+		private System.DateTime _CreatedDate;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnConsumerKeyChanging(System.Guid value);
+    partial void OnConsumerKeyChanged();
+    partial void OnEmailAddressChanging(string value);
+    partial void OnEmailAddressChanged();
+    partial void OnCreatedDateChanging(System.DateTime value);
+    partial void OnCreatedDateChanged();
+    #endregion
+		
+		public Consumer()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConsumerKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid ConsumerKey
 		{
 			get
 			{
-				return this.GetTable<Consumer>();
+				return this._ConsumerKey;
+			}
+			set
+			{
+				if ((this._ConsumerKey != value))
+				{
+					this.OnConsumerKeyChanging(value);
+					this.SendPropertyChanging();
+					this._ConsumerKey = value;
+					this.SendPropertyChanged("ConsumerKey");
+					this.OnConsumerKeyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmailAddress", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string EmailAddress
+		{
+			get
+			{
+				return this._EmailAddress;
+			}
+			set
+			{
+				if ((this._EmailAddress != value))
+				{
+					this.OnEmailAddressChanging(value);
+					this.SendPropertyChanging();
+					this._EmailAddress = value;
+					this.SendPropertyChanged("EmailAddress");
+					this.OnEmailAddressChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
+		public System.DateTime CreatedDate
+		{
+			get
+			{
+				return this._CreatedDate;
+			}
+			set
+			{
+				if ((this._CreatedDate != value))
+				{
+					this.OnCreatedDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreatedDate = value;
+					this.SendPropertyChanged("CreatedDate");
+					this.OnCreatedDateChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Information")]
+	public partial class Information : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Message;
+		
+		private System.DateTime _CreatedDate;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnMessageChanging(string value);
+    partial void OnMessageChanged();
+    partial void OnCreatedDateChanging(System.DateTime value);
+    partial void OnCreatedDateChanged();
+    #endregion
+		
+		public Information()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Message", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Message
+		{
+			get
+			{
+				return this._Message;
+			}
+			set
+			{
+				if ((this._Message != value))
+				{
+					this.OnMessageChanging(value);
+					this.SendPropertyChanging();
+					this._Message = value;
+					this.SendPropertyChanged("Message");
+					this.OnMessageChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
+		public System.DateTime CreatedDate
+		{
+			get
+			{
+				return this._CreatedDate;
+			}
+			set
+			{
+				if ((this._CreatedDate != value))
+				{
+					this.OnCreatedDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreatedDate = value;
+					this.SendPropertyChanged("CreatedDate");
+					this.OnCreatedDateChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
 	}
@@ -332,116 +559,6 @@ namespace OneTransitAPI.Data
 					this._ID = value;
 					this.SendPropertyChanged("ID");
 					this.OnIDChanged();
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Information")]
-	public partial class Information : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _Message;
-		
-		private System.DateTime _CreatedDate;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnMessageChanging(string value);
-    partial void OnMessageChanged();
-    partial void OnCreatedDateChanging(System.DateTime value);
-    partial void OnCreatedDateChanged();
-    #endregion
-		
-		public Information()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Message", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string Message
-		{
-			get
-			{
-				return this._Message;
-			}
-			set
-			{
-				if ((this._Message != value))
-				{
-					this.OnMessageChanging(value);
-					this.SendPropertyChanging();
-					this._Message = value;
-					this.SendPropertyChanged("Message");
-					this.OnMessageChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="DateTime NOT NULL")]
-		public System.DateTime CreatedDate
-		{
-			get
-			{
-				return this._CreatedDate;
-			}
-			set
-			{
-				if ((this._CreatedDate != value))
-				{
-					this.OnCreatedDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreatedDate = value;
-					this.SendPropertyChanged("CreatedDate");
-					this.OnCreatedDateChanged();
 				}
 			}
 		}
@@ -1120,7 +1237,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Latitude", DbType="Decimal(18,0) NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Latitude", DbType="Decimal(18,15) NOT NULL")]
 		public decimal Latitude
 		{
 			get
@@ -1140,7 +1257,7 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Longitude", DbType="Decimal(18,0) NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Longitude", DbType="Decimal(18,15) NOT NULL")]
 		public decimal Longitude
 		{
 			get
@@ -1195,9 +1312,9 @@ namespace OneTransitAPI.Data
 		
 		private string _TripID;
 		
-		private System.TimeSpan _ArrivalTime;
+		private System.DateTime _ArrivalTime;
 		
-		private System.TimeSpan _DepartureTime;
+		private System.DateTime _DepartureTime;
 		
 		private int _StopSequence;
 		
@@ -1213,9 +1330,9 @@ namespace OneTransitAPI.Data
     partial void OnStopIDChanged();
     partial void OnTripIDChanging(string value);
     partial void OnTripIDChanged();
-    partial void OnArrivalTimeChanging(System.TimeSpan value);
+    partial void OnArrivalTimeChanging(System.DateTime value);
     partial void OnArrivalTimeChanged();
-    partial void OnDepartureTimeChanging(System.TimeSpan value);
+    partial void OnDepartureTimeChanging(System.DateTime value);
     partial void OnDepartureTimeChanged();
     partial void OnStopSequenceChanging(int value);
     partial void OnStopSequenceChanged();
@@ -1306,8 +1423,8 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArrivalTime", DbType="Time NOT NULL")]
-		public System.TimeSpan ArrivalTime
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArrivalTime", DbType="DateTime NOT NULL")]
+		public System.DateTime ArrivalTime
 		{
 			get
 			{
@@ -1326,8 +1443,8 @@ namespace OneTransitAPI.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DepartureTime", DbType="Time NOT NULL")]
-		public System.TimeSpan DepartureTime
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DepartureTime", DbType="DateTime NOT NULL")]
+		public System.DateTime DepartureTime
 		{
 			get
 			{
@@ -1545,112 +1662,118 @@ namespace OneTransitAPI.Data
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Consumers")]
-	public partial class Consumer : INotifyPropertyChanging, INotifyPropertyChanged
+	public partial class GetStopTimesResult
 	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		private string _StopID;
 		
-		private System.Guid _ConsumerKey;
+		private System.Guid _PartitionKey;
 		
-		private string _EmailAddress;
+		private string _ShortName;
 		
-		private string _CreatedDate;
+		private string _LongName;
 		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnConsumerKeyChanging(System.Guid value);
-    partial void OnConsumerKeyChanged();
-    partial void OnEmailAddressChanging(string value);
-    partial void OnEmailAddressChanged();
-    partial void OnCreatedDateChanging(string value);
-    partial void OnCreatedDateChanged();
-    #endregion
+		private System.DateTime _ArrivalTime;
 		
-		public Consumer()
+		private System.DateTime _DepartureTime;
+		
+		public GetStopTimesResult()
 		{
-			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConsumerKey", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid ConsumerKey
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StopID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string StopID
 		{
 			get
 			{
-				return this._ConsumerKey;
+				return this._StopID;
 			}
 			set
 			{
-				if ((this._ConsumerKey != value))
+				if ((this._StopID != value))
 				{
-					this.OnConsumerKeyChanging(value);
-					this.SendPropertyChanging();
-					this._ConsumerKey = value;
-					this.SendPropertyChanged("ConsumerKey");
-					this.OnConsumerKeyChanged();
+					this._StopID = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmailAddress", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string EmailAddress
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PartitionKey", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid PartitionKey
 		{
 			get
 			{
-				return this._EmailAddress;
+				return this._PartitionKey;
 			}
 			set
 			{
-				if ((this._EmailAddress != value))
+				if ((this._PartitionKey != value))
 				{
-					this.OnEmailAddressChanging(value);
-					this.SendPropertyChanging();
-					this._EmailAddress = value;
-					this.SendPropertyChanged("EmailAddress");
-					this.OnEmailAddressChanged();
+					this._PartitionKey = value;
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedDate", DbType="NVarChar(15) NOT NULL", CanBeNull=false)]
-		public string CreatedDate
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShortName", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		public string ShortName
 		{
 			get
 			{
-				return this._CreatedDate;
+				return this._ShortName;
 			}
 			set
 			{
-				if ((this._CreatedDate != value))
+				if ((this._ShortName != value))
 				{
-					this.OnCreatedDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreatedDate = value;
-					this.SendPropertyChanged("CreatedDate");
-					this.OnCreatedDateChanged();
+					this._ShortName = value;
 				}
 			}
 		}
 		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LongName", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+		public string LongName
 		{
-			if ((this.PropertyChanging != null))
+			get
 			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
+				return this._LongName;
+			}
+			set
+			{
+				if ((this._LongName != value))
+				{
+					this._LongName = value;
+				}
 			}
 		}
 		
-		protected virtual void SendPropertyChanged(String propertyName)
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArrivalTime", DbType="DateTime NOT NULL")]
+		public System.DateTime ArrivalTime
 		{
-			if ((this.PropertyChanged != null))
+			get
 			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+				return this._ArrivalTime;
+			}
+			set
+			{
+				if ((this._ArrivalTime != value))
+				{
+					this._ArrivalTime = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DepartureTime", DbType="DateTime NOT NULL")]
+		public System.DateTime DepartureTime
+		{
+			get
+			{
+				return this._DepartureTime;
+			}
+			set
+			{
+				if ((this._DepartureTime != value))
+				{
+					this._DepartureTime = value;
+				}
 			}
 		}
 	}

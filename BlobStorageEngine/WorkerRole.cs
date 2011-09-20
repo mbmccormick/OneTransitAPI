@@ -61,7 +61,7 @@ namespace BlobStorageEngine
                 DebugTextWriter trace = new DebugTextWriter();
                 db.Log = trace;
 
-                var agencies = from a in db.GTFS_Agencies where a.ID == "mta" || a.ID == "capmetro" select a; // from a in db.GTFS_Agencies orderby a.Name select a;
+                var agencies = from a in db.GTFS_Agencies orderby a.Name select a;
                 foreach (GTFS_Agency a in agencies)
                 {
                     try
@@ -105,6 +105,9 @@ namespace BlobStorageEngine
                         Utilities.LogEvent("BlobStorageEngine", "Initializing GTFS Engine...");
                         Engine gtfsEngine = new Engine(new DictionarySourceDataCollection(streamData));
 
+                        Guid newPartitionKey = Guid.NewGuid();
+                        Guid oldPartitionKey = a.PartitionKey;
+
                         #region Update GTFS_Calendar
 
                         Utilities.LogEvent("BlobStorageEngine", "Uploading records for GTFS_Calendar.");
@@ -137,7 +140,7 @@ namespace BlobStorageEngine
                         doc = new XmlDocument();
                         doc.LoadXml(builder.ToString());
 
-                        db.InsertCalendars(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), a.PartitionKey);
+                        db.InsertCalendars(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), newPartitionKey, oldPartitionKey);
 
                         #endregion
 
@@ -167,7 +170,7 @@ namespace BlobStorageEngine
                         doc = new XmlDocument();
                         doc.LoadXml(builder.ToString());
 
-                        db.InsertRoutes(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), a.PartitionKey);
+                        db.InsertRoutes(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), newPartitionKey, oldPartitionKey);
 
                         #endregion
 
@@ -198,7 +201,7 @@ namespace BlobStorageEngine
                         doc = new XmlDocument();
                         doc.LoadXml(builder.ToString());
 
-                        db.InsertStops(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), a.PartitionKey);
+                        db.InsertStops(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), newPartitionKey, oldPartitionKey);
 
                         #endregion
 
@@ -211,12 +214,12 @@ namespace BlobStorageEngine
                             GTFS_StopTime data = new GTFS_StopTime();
 
                             data.RowKey = Guid.NewGuid();
-                            data.PartitionKey = a.PartitionKey;
+                            data.PartitionKey = newPartitionKey;
                             data.StopID = t.StopID;
                             data.TripID = t.TripID;
                             data.StopSequence = t.StopSequence;
-                            data.ArrivalTime = DateTime.MinValue.Add(t.ArrivalTime);
-                            data.DepartureTime = DateTime.MinValue.Add(t.DepartureTime);
+                            data.ArrivalTime = new DateTime(2000, 1, 1, t.ArrivalTime.Hours, t.ArrivalTime.Minutes, t.ArrivalTime.Seconds, t.ArrivalTime.Milliseconds);
+                            data.DepartureTime = new DateTime(2000, 1, 1, t.DepartureTime.Hours, t.DepartureTime.Minutes, t.DepartureTime.Seconds, t.DepartureTime.Milliseconds);
 
                             stopTimes.Add(data);
                         }
@@ -229,7 +232,7 @@ namespace BlobStorageEngine
                         doc = new XmlDocument();
                         doc.LoadXml(builder.ToString());
 
-                        db.InsertStopTimes(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), a.PartitionKey);
+                        db.InsertStopTimes(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), newPartitionKey, oldPartitionKey);
 
                         #endregion
 
@@ -252,13 +255,13 @@ namespace BlobStorageEngine
 
                         builder = new StringBuilder();
                         writer = new StringWriter(builder);
-                        serializer = new XmlSerializer(typeof(List<GTFS_StopTime>));
+                        serializer = new XmlSerializer(typeof(List<GTFS_Trip>));
                         serializer.Serialize(writer, trips);
 
                         doc = new XmlDocument();
                         doc.LoadXml(builder.ToString());
 
-                        db.InsertTrips(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), a.PartitionKey);
+                        db.InsertTrips(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), newPartitionKey, oldPartitionKey);
 
                         #endregion
 
@@ -270,9 +273,9 @@ namespace BlobStorageEngine
                     catch (Exception ex)
                     {
                         Utilities.LogEvent("BlobStorageEngine", "An unhandled exception has occurred. Message: " + ex.Message + "; " +
-                                                                                                    "Source: " + ex.Source + "; " +
-                                                                                                    "TargetSite: " + ex.TargetSite + "; " +
-                                                                                                    "StackTrace: " + ex.StackTrace + ";");
+                                                                                                     "Source: " + ex.Source + "; " +
+                                                                                                     "TargetSite: " + ex.TargetSite + "; " +
+                                                                                                     "StackTrace: " + ex.StackTrace + ";");
 
                         System.Threading.Thread.Sleep(5000);
                     }
@@ -280,7 +283,7 @@ namespace BlobStorageEngine
 
                 Utilities.LogEvent("BlobStorageEngine", "Going to sleep.");
 
-                Thread.Sleep(1000 * 60 * 60 * 72);
+                Thread.Sleep(1000 * 60 * 60 * 24 * 7);
             }
         }
 

@@ -67,7 +67,7 @@ namespace OneTransitAPI.Transit
                 StopTime t = new StopTime();
                 t.RouteShortName = r["rt"].ToString();
                 t.RouteLongName = r["rt"].ToString();
-                t.ArrivalTime = DateTime.ParseExact(r["prdtm"].ToString(), "yyyyMMdd HH:mm", new System.Globalization.CultureInfo("en-US")).ToString("t");
+                t.ArrivalTime = DateTime.ParseExact(r["prdtm"].ToString(), "yyyyMMdd HH:mm", new System.Globalization.CultureInfo("en-US")).ToString("hh:mm tt");
                 t.DepartureTime = t.ArrivalTime;
                 t.Type = "realtime";
 
