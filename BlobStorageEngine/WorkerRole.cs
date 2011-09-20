@@ -16,9 +16,14 @@ using OneTransitAPI.Common;
 using Stancer.GTFSEngine;
 using Stancer.GTFSEngine.Entities;
 using System.Text;
+using System.Xml.Serialization;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace BlobStorageEngine
 {
+    #region DebugTextWriter
+
     public class DebugTextWriter : System.IO.TextWriter
     {
         public override void Write(char[] buffer, int index, int count)
@@ -37,6 +42,8 @@ namespace BlobStorageEngine
         }
     }
 
+    #endregion
+
     public class WorkerRole : RoleEntryPoint
     {
         public override void Run()
@@ -47,25 +54,30 @@ namespace BlobStorageEngine
             while (true)
             {
                 Utilities.LogEvent("BlobStorageEngine", "Waking up...");
-                
-                try
+
+                DatabaseDataContext db = new DatabaseDataContext();
+                db.CommandTimeout = 0;
+
+                DebugTextWriter trace = new DebugTextWriter();
+                db.Log = trace;
+
+                var agencies = from a in db.GTFS_Agencies where a.ID == "mta" || a.ID == "capmetro" select a; // from a in db.GTFS_Agencies orderby a.Name select a;
+                foreach (GTFS_Agency a in agencies)
                 {
-                    DatabaseDataContext db = new DatabaseDataContext();
-                    db.CommandTimeout = 0; // this is VERY bad
-
-                    // DEBUG
-                    DebugTextWriter trace = new DebugTextWriter();
-                    db.Log = trace;
-
-                    var agencies = from a in db.GTFS_Agencies where a.ID == "mta" select a; // from a in db.GTFS_Agencies orderby a.Name select a;
-
-                    foreach (GTFS_Agency a in agencies)
+                    try
                     {
                         if (a.URL == null ||
                             a.URL.Length == 0)
                         {
                             continue;
                         }
+
+                        StringBuilder builder;
+                        StringWriter writer;
+                        XmlSerializer serializer;
+                        XmlDocument doc;
+
+                        #region Download GTFS data
 
                         Utilities.LogEvent("BlobStorageEngine", "Downloading new GTFS data for " + a.Name + " (" + a.ID + ")...");
 
@@ -88,22 +100,15 @@ namespace BlobStorageEngine
 
                         download.Dispose();
 
-                        Utilities.LogEvent("BlobStorageEngine", "Removing old records from database.");
-                        db.ExecuteCommand("DELETE FROM dbo.GTFS_Calendar WHERE PartitionKey = '" + a.PartitionKey + "'");
-                        db.ExecuteCommand("DELETE FROM dbo.GTFS_Routes WHERE PartitionKey = '" + a.PartitionKey + "'");
-                        db.ExecuteCommand("DELETE FROM dbo.GTFS_Stops WHERE PartitionKey = '" + a.PartitionKey + "'");
-                        db.ExecuteCommand("DELETE FROM dbo.GTFS_StopTimes WHERE PartitionKey = '" + a.PartitionKey + "'");
-                        db.ExecuteCommand("DELETE FROM dbo.GTFS_Trips WHERE PartitionKey = '" + a.PartitionKey + "'");
-
-                        Utilities.LogEvent("BlobStorageEngine", "Submitting Changes...");
-                        db.SubmitChanges();
+                        #endregion
 
                         Utilities.LogEvent("BlobStorageEngine", "Initializing GTFS Engine...");
                         Engine gtfsEngine = new Engine(new DictionarySourceDataCollection(streamData));
 
-                        Utilities.LogEvent("BlobStorageEngine", "Inserting new records to database...");
+                        #region Update GTFS_Calendar
 
-                        Utilities.LogEvent("BlobStorageEngine", "Queuing records for GTFS_Calendar.");
+                        Utilities.LogEvent("BlobStorageEngine", "Uploading records for GTFS_Calendar.");
+                        List<GTFS_Calendar> calendars = new List<GTFS_Calendar>();
                         foreach (Calendar c in gtfsEngine.Calendars)
                         {
                             GTFS_Calendar data = new GTFS_Calendar();
@@ -121,10 +126,25 @@ namespace BlobStorageEngine
                             data.StartDate = c.DateStart;
                             data.EndDate = c.DateEnd;
 
-                            db.GTFS_Calendars.InsertOnSubmit(data);
+                            calendars.Add(data);
                         }
 
-                        Utilities.LogEvent("BlobStorageEngine", "Queuing records for GTFS_Routes.");
+                        builder = new StringBuilder();
+                        writer = new StringWriter(builder);
+                        serializer = new XmlSerializer(typeof(List<GTFS_Calendar>));
+                        serializer.Serialize(writer, calendars);
+
+                        doc = new XmlDocument();
+                        doc.LoadXml(builder.ToString());
+
+                        db.InsertCalendars(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), a.PartitionKey);
+
+                        #endregion
+
+                        #region Update GTFS_Routes
+
+                        Utilities.LogEvent("BlobStorageEngine", "Uploading records for GTFS_Routes.");
+                        List<GTFS_Route> routes = new List<GTFS_Route>();
                         foreach (Route r in gtfsEngine.Routes)
                         {
                             GTFS_Route data = new GTFS_Route();
@@ -136,10 +156,25 @@ namespace BlobStorageEngine
                             data.ShortName = r.ShortName;
                             data.Type = (int)r.RouteType;
 
-                            db.GTFS_Routes.InsertOnSubmit(data);
+                            routes.Add(data);
                         }
 
-                        Utilities.LogEvent("BlobStorageEngine", "Queuing records for GTFS_Stops.");
+                        builder = new StringBuilder();
+                        writer = new StringWriter(builder);
+                        serializer = new XmlSerializer(typeof(List<GTFS_Route>));
+                        serializer.Serialize(writer, routes);
+
+                        doc = new XmlDocument();
+                        doc.LoadXml(builder.ToString());
+
+                        db.InsertRoutes(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), a.PartitionKey);
+
+                        #endregion
+
+                        #region Update GTFS_Stops
+
+                        Utilities.LogEvent("BlobStorageEngine", "Uploading records for GTFS_Stops.");
+                        List<GTFS_Stop> stops = new List<GTFS_Stop>();
                         foreach (Stop s in gtfsEngine.Stops)
                         {
                             GTFS_Stop data = new GTFS_Stop();
@@ -152,10 +187,25 @@ namespace BlobStorageEngine
                             data.Latitude = s.Lat;
                             data.Longitude = s.Lon;
 
-                            db.GTFS_Stops.InsertOnSubmit(data);
+                            stops.Add(data);
                         }
 
-                        Utilities.LogEvent("BlobStorageEngine", "Queuing records for GTFS_StopTimes.");
+                        builder = new StringBuilder();
+                        writer = new StringWriter(builder);
+                        serializer = new XmlSerializer(typeof(List<GTFS_Stop>));
+                        serializer.Serialize(writer, stops);
+
+                        doc = new XmlDocument();
+                        doc.LoadXml(builder.ToString());
+
+                        db.InsertStops(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), a.PartitionKey);
+
+                        #endregion
+
+                        #region Update GTFS_StopTimes
+
+                        Utilities.LogEvent("BlobStorageEngine", "Uploading records for GTFS_StopTimes.");
+                        List<GTFS_StopTime> stopTimes = new List<GTFS_StopTime>();
                         foreach (StopTime t in gtfsEngine.Stop_Times)
                         {
                             GTFS_StopTime data = new GTFS_StopTime();
@@ -165,13 +215,28 @@ namespace BlobStorageEngine
                             data.StopID = t.StopID;
                             data.TripID = t.TripID;
                             data.StopSequence = t.StopSequence;
-                            data.ArrivalTime = t.ArrivalTime;
-                            data.DepartureTime = t.DepartureTime;
+                            data.ArrivalTime = DateTime.MinValue.Add(t.ArrivalTime);
+                            data.DepartureTime = DateTime.MinValue.Add(t.DepartureTime);
 
-                            db.GTFS_StopTimes.InsertOnSubmit(data);
+                            stopTimes.Add(data);
                         }
 
-                        Utilities.LogEvent("BlobStorageEngine", "Queuing records for GTFS_Trips.");
+                        builder = new StringBuilder();
+                        writer = new StringWriter(builder);
+                        serializer = new XmlSerializer(typeof(List<GTFS_StopTime>));
+                        serializer.Serialize(writer, stopTimes);
+
+                        doc = new XmlDocument();
+                        doc.LoadXml(builder.ToString());
+
+                        db.InsertStopTimes(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), a.PartitionKey);
+
+                        #endregion
+
+                        #region Update GTFS_Trips
+
+                        Utilities.LogEvent("BlobStorageEngine", "Uploading records for GTFS_Trips.");
+                        List<GTFS_Trip> trips = new List<GTFS_Trip>();
                         foreach (Trip t in gtfsEngine.Trips)
                         {
                             GTFS_Trip data = new GTFS_Trip();
@@ -182,26 +247,35 @@ namespace BlobStorageEngine
                             data.RouteID = t.RouteID;
                             data.ServiceID = t.ServiceID;
 
-                            db.GTFS_Trips.InsertOnSubmit(data);
+                            trips.Add(data);
                         }
 
-                        Utilities.LogEvent("BlobStorageEngine", "Submitting changes...");
-                        db.SubmitChanges();
-                        
+                        builder = new StringBuilder();
+                        writer = new StringWriter(builder);
+                        serializer = new XmlSerializer(typeof(List<GTFS_StopTime>));
+                        serializer.Serialize(writer, trips);
+
+                        doc = new XmlDocument();
+                        doc.LoadXml(builder.ToString());
+
+                        db.InsertTrips(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), a.PartitionKey);
+
+                        #endregion
+
                         foreach (Stream s in streamData.Values)
                             s.Dispose();
 
                         Utilities.LogEvent("BlobStorageEngine", "Complete.");
                     }
-                }
-                catch (Exception ex)
-                {
-                    Utilities.LogEvent("BlobStorageEngine", "An unhandled exception has occurred. Message: " + ex.Message + "; " +
-                                                                                                "Source: " + ex.Source + "; " +
-                                                                                                "TargetSite: " + ex.TargetSite + "; " +
-                                                                                                "StackTrace: " + ex.StackTrace + ";");
+                    catch (Exception ex)
+                    {
+                        Utilities.LogEvent("BlobStorageEngine", "An unhandled exception has occurred. Message: " + ex.Message + "; " +
+                                                                                                    "Source: " + ex.Source + "; " +
+                                                                                                    "TargetSite: " + ex.TargetSite + "; " +
+                                                                                                    "StackTrace: " + ex.StackTrace + ";");
 
-                    System.Threading.Thread.Sleep(5000);
+                        System.Threading.Thread.Sleep(5000);
+                    }
                 }
 
                 Utilities.LogEvent("BlobStorageEngine", "Going to sleep.");

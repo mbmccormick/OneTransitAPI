@@ -60,6 +60,7 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Register.aspx" />
     <Content Include="StyleSheet.css" />
     <Content Include="TransitService.svc" />
     <Content Include="Web.config">
@@ -95,6 +96,13 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Register.aspx.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Register.aspx.designer.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
     <Compile Include="TransitService.svc.cs">
       <DependentUpon>TransitService.svc</DependentUpon>

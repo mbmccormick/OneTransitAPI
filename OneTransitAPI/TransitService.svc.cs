@@ -27,7 +27,7 @@ namespace OneTransitAPI
 
             List<Agency> result = new List<Agency>();
 
-            foreach (var r in db.GTFS_Agencies)
+            foreach (var r in db.GTFS_Agencies.OrderBy(a => a.Name))
             {
                 Agency a = new Agency();
                 a.AgencyID = r.ID;

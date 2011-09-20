@@ -18,9 +18,9 @@
         </div>
         <div id="content">
             <div class="introduction">
-                OneTransit is a simple service that makes it easy to access real-time public
-                transit data for over 175 transit agencies. Data is pulled from hundreds of web
-                services to provide real-time data when available. When real-time data is not available,
+                OneTransit is a simple service that makes it easy to access real-time public transit
+                data for over 175 transit agencies. Data is pulled from hundreds of web services
+                to provide real-time data when available. When real-time data is not available,
                 OneTransitAPI delivers scheduled data, which is updated every 72 hours.
             </div>
             <br />
@@ -57,10 +57,10 @@
             </div>
             <br />
             <div class="disclaimer">
-                <b>Disclaimer</b>
+                <b>Authentication</b>
                 <p>
-                    While this API is currently active and serving up responses, it is still an alpha
-                    release and is not meant for production use. Use this service at your own discretion.</p>
+                    All API consumers will need to provide an API key in order to access this web service.
+                    You can register for an API key <a href="Register.aspx">here</a>.</p>
             </div>
         </div>
         <div id="footer">

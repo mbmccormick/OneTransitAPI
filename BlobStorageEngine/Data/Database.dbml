@@ -53,8 +53,8 @@
       <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Column Name="Name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Column Name="Code" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="Latitude" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="Longitude" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="Latitude" Type="System.Decimal" DbType="Decimal(18,15) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="Longitude" Type="System.Decimal" DbType="Decimal(18,15) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
     </Type>
   </Table>
   <Table Name="dbo.GTFS_StopTimes" Member="GTFS_StopTimes">
@@ -63,9 +63,34 @@
       <Column Name="PartitionKey" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Column Name="StopID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Column Name="TripID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="ArrivalTime" Type="System.TimeSpan" DbType="Time NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="DepartureTime" Type="System.TimeSpan" DbType="Time NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="ArrivalTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="DepartureTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Column Name="StopSequence" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" UpdateCheck="Never" />
     </Type>
   </Table>
+  <Function Name="dbo.InsertCalendars" Method="InsertCalendars">
+    <Parameter Name="SerializedData" Parameter="serializedData" Type="System.Xml.Linq.XElement" DbType="Xml" />
+    <Parameter Name="PartitionKey" Parameter="partitionKey" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.InsertTrips" Method="InsertTrips">
+    <Parameter Name="SerializedData" Parameter="serializedData" Type="System.Xml.Linq.XElement" DbType="Xml" />
+    <Parameter Name="PartitionKey" Parameter="partitionKey" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.InsertRoutes" Method="InsertRoutes">
+    <Parameter Name="SerializedData" Parameter="serializedData" Type="System.Xml.Linq.XElement" DbType="Xml" />
+    <Parameter Name="PartitionKey" Parameter="partitionKey" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.InsertStops" Method="InsertStops">
+    <Parameter Name="SerializedData" Parameter="serializedData" Type="System.Xml.Linq.XElement" DbType="Xml" />
+    <Parameter Name="PartitionKey" Parameter="partitionKey" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.InsertStopTimes" Method="InsertStopTimes">
+    <Parameter Name="SerializedData" Parameter="serializedData" Type="System.Xml.Linq.XElement" DbType="Xml" />
+    <Parameter Name="PartitionKey" Parameter="partitionKey" Type="System.Guid" DbType="UniqueIdentifier" />
+    <Return Type="System.Int32" />
+  </Function>
 </Database>

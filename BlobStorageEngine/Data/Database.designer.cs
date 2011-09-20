@@ -127,6 +127,41 @@ namespace BlobStorageEngine.Data
 				return this.GetTable<GTFS_StopTime>();
 			}
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.InsertCalendars")]
+		public int InsertCalendars([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> partitionKey)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, partitionKey);
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.InsertTrips")]
+		public int InsertTrips([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> partitionKey)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, partitionKey);
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.InsertRoutes")]
+		public int InsertRoutes([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> partitionKey)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, partitionKey);
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.InsertStops")]
+		public int InsertStops([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> partitionKey)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, partitionKey);
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.InsertStopTimes")]
+		public int InsertStopTimes([global::System.Data.Linq.Mapping.ParameterAttribute(Name="SerializedData", DbType="Xml")] System.Xml.Linq.XElement serializedData, [global::System.Data.Linq.Mapping.ParameterAttribute(Name="PartitionKey", DbType="UniqueIdentifier")] System.Nullable<System.Guid> partitionKey)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), serializedData, partitionKey);
+			return ((int)(result.ReturnValue));
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.GTFS_Agency")]
@@ -1146,7 +1181,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Latitude", DbType="Decimal(18,0) NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Latitude", DbType="Decimal(18,15) NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public decimal Latitude
 		{
 			get
@@ -1166,7 +1201,7 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Longitude", DbType="Decimal(18,0) NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Longitude", DbType="Decimal(18,15) NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public decimal Longitude
 		{
 			get
@@ -1221,9 +1256,9 @@ namespace BlobStorageEngine.Data
 		
 		private string _TripID;
 		
-		private System.TimeSpan _ArrivalTime;
+		private System.DateTime _ArrivalTime;
 		
-		private System.TimeSpan _DepartureTime;
+		private System.DateTime _DepartureTime;
 		
 		private int _StopSequence;
 		
@@ -1239,9 +1274,9 @@ namespace BlobStorageEngine.Data
     partial void OnStopIDChanged();
     partial void OnTripIDChanging(string value);
     partial void OnTripIDChanged();
-    partial void OnArrivalTimeChanging(System.TimeSpan value);
+    partial void OnArrivalTimeChanging(System.DateTime value);
     partial void OnArrivalTimeChanged();
-    partial void OnDepartureTimeChanging(System.TimeSpan value);
+    partial void OnDepartureTimeChanging(System.DateTime value);
     partial void OnDepartureTimeChanged();
     partial void OnStopSequenceChanging(int value);
     partial void OnStopSequenceChanged();
@@ -1332,8 +1367,8 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArrivalTime", DbType="Time NOT NULL", UpdateCheck=UpdateCheck.Never)]
-		public System.TimeSpan ArrivalTime
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArrivalTime", DbType="DateTime NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public System.DateTime ArrivalTime
 		{
 			get
 			{
@@ -1352,8 +1387,8 @@ namespace BlobStorageEngine.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DepartureTime", DbType="Time NOT NULL", UpdateCheck=UpdateCheck.Never)]
-		public System.TimeSpan DepartureTime
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DepartureTime", DbType="DateTime NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public System.DateTime DepartureTime
 		{
 			get
 			{
