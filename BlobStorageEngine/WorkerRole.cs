@@ -117,7 +117,7 @@ namespace BlobStorageEngine
                             GTFS_Calendar data = new GTFS_Calendar();
 
                             data.RowKey = Guid.NewGuid();
-                            data.PartitionKey = a.PartitionKey;
+                            data.PartitionKey = newPartitionKey;
                             data.ServiceID = c.ServiceID;
                             data.Monday = c.Monday;
                             data.Tuesday = c.Tuesday;
@@ -153,7 +153,7 @@ namespace BlobStorageEngine
                             GTFS_Route data = new GTFS_Route();
 
                             data.RowKey = Guid.NewGuid();
-                            data.PartitionKey = a.PartitionKey;
+                            data.PartitionKey = newPartitionKey;
                             data.ID = r.RouteID;
                             data.LongName = r.LongName;
                             data.ShortName = r.ShortName;
@@ -183,7 +183,7 @@ namespace BlobStorageEngine
                             GTFS_Stop data = new GTFS_Stop();
 
                             data.RowKey = Guid.NewGuid();
-                            data.PartitionKey = a.PartitionKey;
+                            data.PartitionKey = newPartitionKey;
                             data.ID = s.ID;
                             data.Code = s.Code;
                             data.Name = s.Name;
@@ -245,7 +245,7 @@ namespace BlobStorageEngine
                             GTFS_Trip data = new GTFS_Trip();
 
                             data.RowKey = Guid.NewGuid();
-                            data.PartitionKey = a.PartitionKey;
+                            data.PartitionKey = newPartitionKey;
                             data.ID = t.TripID;
                             data.RouteID = t.RouteID;
                             data.ServiceID = t.ServiceID;
