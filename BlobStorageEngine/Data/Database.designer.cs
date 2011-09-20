@@ -51,7 +51,7 @@ namespace BlobStorageEngine.Data
     #endregion
 		
 		public DatabaseDataContext() : 
-				base(global::BlobStorageEngine.Properties.Settings.Default.OneTransitAPIConnectionString1, mappingSource)
+				base(global::BlobStorageEngine.Properties.Settings.Default.OneTransitAPIConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
