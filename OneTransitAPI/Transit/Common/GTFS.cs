@@ -45,7 +45,8 @@ namespace OneTransitAPI.Transit.Common
 
         public override Stop GetStop(string stopid)
         {
-            var stop = (from s in db.GTFS_Stops where s.ID.ToUpper() == stopid.ToUpper() select s).Single();
+            var stop = (from s in db.GTFS_Stops where s.PartitionKey == agency.PartitionKey &&
+                                                      s.ID.ToUpper() == stopid.ToUpper() select s).Single();
 
             Stop result = new Stop();
             result.ID = stop.ID;
