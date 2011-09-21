@@ -48,8 +48,8 @@ namespace BlobStorageEngine
     {
         public override void Run()
         {
-            WebClient web = new WebClient();
-            web.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.CacheIfAvailable);
+            WebClient client = new WebClient();
+            client.CachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.CacheIfAvailable);
 
             while (true)
             {
@@ -81,11 +81,11 @@ namespace BlobStorageEngine
 
                         Utilities.LogEvent("BlobStorageEngine", "Downloading new GTFS data for " + a.Name + " (" + a.ID + ")...");
 
-                        byte[] rawData = web.DownloadData(a.URL);
+                        byte[] rawData = client.DownloadData(a.URL);
                         MemoryStream download = new MemoryStream(rawData);
-
+                        
                         ZipFile gtfsData = ZipFile.Read(download);
-
+                        
                         Dictionary<string, Stream> streamData = new Dictionary<string, Stream>();
 
                         foreach (ZipEntry file in gtfsData)
@@ -98,6 +98,7 @@ namespace BlobStorageEngine
                             streamData.Add(file.FileName.ToLower().Replace(".txt", ""), output);
                         }
 
+                        gtfsData.Dispose();
                         download.Dispose();
 
                         #endregion
@@ -142,6 +143,9 @@ namespace BlobStorageEngine
 
                         db.InsertCalendars(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), newPartitionKey, oldPartitionKey);
 
+                        calendars.Clear();
+                        GC.Collect();
+
                         #endregion
 
                         #region Update GTFS_Routes
@@ -171,6 +175,9 @@ namespace BlobStorageEngine
                         doc.LoadXml(builder.ToString());
 
                         db.InsertRoutes(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), newPartitionKey, oldPartitionKey);
+
+                        routes.Clear();
+                        GC.Collect();
 
                         #endregion
 
@@ -203,6 +210,9 @@ namespace BlobStorageEngine
 
                         db.InsertStops(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), newPartitionKey, oldPartitionKey);
 
+                        stops.Clear();
+                        GC.Collect();
+
                         #endregion
 
                         #region Update GTFS_StopTimes
@@ -234,6 +244,9 @@ namespace BlobStorageEngine
 
                         db.InsertStopTimes(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), newPartitionKey, oldPartitionKey);
 
+                        stopTimes.Clear();
+                        GC.Collect();
+
                         #endregion
 
                         #region Update GTFS_Trips
@@ -263,7 +276,12 @@ namespace BlobStorageEngine
 
                         db.InsertTrips(XElement.Load(doc.DocumentElement.CreateNavigator().ReadSubtree()), newPartitionKey, oldPartitionKey);
 
+                        trips.Clear();
+                        GC.Collect();
+
                         #endregion
+
+                        writer.Dispose();
 
                         foreach (Stream s in streamData.Values)
                             s.Dispose();
