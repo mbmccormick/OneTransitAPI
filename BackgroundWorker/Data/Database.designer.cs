@@ -51,7 +51,7 @@ namespace BackgroundWorker.Data
     #endregion
 		
 		public DatabaseDataContext() : 
-				base(global::BackgroundWorker.Properties.Settings.Default.OneTransitAPIConnectionString1, mappingSource)
+				base(global::BackgroundWorker.Properties.Settings.Default.OneTransitAPIConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
