@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BlobStorageEngine.Data
+namespace BackgroundWorker.Data
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -51,7 +51,7 @@ namespace BlobStorageEngine.Data
     #endregion
 		
 		public DatabaseDataContext() : 
-				base(global::BlobStorageEngine.Properties.Settings.Default.OneTransitAPIConnectionString, mappingSource)
+				base(global::BackgroundWorker.Properties.Settings.Default.OneTransitAPIConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}

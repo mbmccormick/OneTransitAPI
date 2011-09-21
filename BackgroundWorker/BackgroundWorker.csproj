@@ -8,8 +8,8 @@
     <ProjectGuid>{D1853466-1544-4BFF-8C7E-065CE5A6C571}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BlobStorageEngine</RootNamespace>
-    <AssemblyName>BlobStorageEngine</AssemblyName>
+    <RootNamespace>BackgroundWorker</RootNamespace>
+    <AssemblyName>BackgroundWorker</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <RoleType>Worker</RoleType>

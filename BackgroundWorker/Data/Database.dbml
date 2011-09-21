@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="OneTransitAPI" Class="DatabaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=ick5mba97o.database.windows.net;Initial Catalog=OneTransitAPI;Persist Security Info=True;User ID=mbmccormick" SettingsObjectName="BlobStorageEngine.Properties.Settings" SettingsPropertyName="OneTransitAPIConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=ick5mba97o.database.windows.net;Initial Catalog=OneTransitAPI;Persist Security Info=True;User ID=mbmccormick" SettingsObjectName="BackgroundWorker.Properties.Settings" SettingsPropertyName="OneTransitAPIConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.GTFS_Agency" Member="GTFS_Agencies">
     <Type Name="GTFS_Agency">
       <Column Name="RowKey" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />

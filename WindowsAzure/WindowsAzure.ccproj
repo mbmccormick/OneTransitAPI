@@ -36,14 +36,6 @@
     <ServiceConfiguration Include="ServiceConfiguration.cscfg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BlobStorageEngine\BlobStorageEngine.csproj">
-      <Name>BlobStorageEngine</Name>
-      <Project>{d1853466-1544-4bff-8c7e-065ce5a6c571}</Project>
-      <Private>True</Private>
-      <RoleType>Worker</RoleType>
-      <RoleName>BlobStorageEngine</RoleName>
-      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
-    </ProjectReference>
     <ProjectReference Include="..\OneTransitAPI\OneTransitAPI.csproj">
       <Name>OneTransitAPI</Name>
       <Project>{d0525c60-b141-4dd3-8485-f7fc3dd80133}</Project>

@@ -8,39 +8,47 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BlobStorageEngine.Properties {
-    
-    
+namespace BackgroundWorker.Properties
+{
+
+
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "10.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-        
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
+    {
+
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-        
-        public static Settings Default {
-            get {
+
+        public static Settings Default
+        {
+            get
+            {
                 return defaultInstance;
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ick5mba97o.database.windows.net;Initial Catalog=OneTransitAPI;Persist" +
             " Security Info=True;User ID=mccormick_tech;Password=mcc0rm1ck_t3ch!")]
-        public string OneTransitAPIConnectionString {
-            get {
+        public string OneTransitAPIConnectionString
+        {
+            get
+            {
                 return ((string)(this["OneTransitAPIConnectionString"]));
             }
         }
-        
+
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ick5mba97o.database.windows.net;Initial Catalog=OneTransitAPI;Persist" +
             " Security Info=True;User ID=mbmccormick;Password=6rEba4E8RuZu")]
-        public string OneTransitAPIConnectionString1 {
-            get {
+        public string OneTransitAPIConnectionString1
+        {
+            get
+            {
                 return ((string)(this["OneTransitAPIConnectionString1"]));
             }
         }

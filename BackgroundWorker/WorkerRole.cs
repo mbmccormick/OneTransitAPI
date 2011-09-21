@@ -11,7 +11,7 @@ using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.StorageClient;
 using Ionic.Zip;
-using BlobStorageEngine.Data;
+using BackgroundWorker.Data;
 using OneTransitAPI.Common;
 using Stancer.GTFSEngine;
 using Stancer.GTFSEngine.Entities;
@@ -20,7 +20,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace BlobStorageEngine
+namespace BackgroundWorker
 {
     #region DebugTextWriter
 
@@ -53,7 +53,7 @@ namespace BlobStorageEngine
 
             while (true)
             {
-                Utilities.LogEvent("BlobStorageEngine", "Waking up...");
+                Utilities.LogEvent("BackgroundWorker", "Waking up...");
 
                 DatabaseDataContext db = new DatabaseDataContext();
                 db.CommandTimeout = 0;
@@ -79,7 +79,7 @@ namespace BlobStorageEngine
 
                         #region Download GTFS data
 
-                        Utilities.LogEvent("BlobStorageEngine", "Downloading new GTFS data for " + a.Name + " (" + a.ID + ")...");
+                        Utilities.LogEvent("BackgroundWorker", "Downloading new GTFS data for " + a.Name + " (" + a.ID + ")...");
 
                         byte[] rawData = client.DownloadData(a.URL);
                         MemoryStream download = new MemoryStream(rawData);
@@ -103,7 +103,7 @@ namespace BlobStorageEngine
 
                         #endregion
 
-                        Utilities.LogEvent("BlobStorageEngine", "Initializing GTFS Engine...");
+                        Utilities.LogEvent("BackgroundWorker", "Initializing GTFS Engine...");
                         Engine gtfsEngine = new Engine(new DictionarySourceDataCollection(streamData));
 
                         Guid newPartitionKey = Guid.NewGuid();
@@ -111,7 +111,7 @@ namespace BlobStorageEngine
 
                         #region Update GTFS_Calendar
 
-                        Utilities.LogEvent("BlobStorageEngine", "Uploading records for GTFS_Calendar.");
+                        Utilities.LogEvent("BackgroundWorker", "Uploading records for GTFS_Calendar.");
                         List<GTFS_Calendar> calendars = new List<GTFS_Calendar>();
                         foreach (Calendar c in gtfsEngine.Calendars)
                         {
@@ -150,7 +150,7 @@ namespace BlobStorageEngine
 
                         #region Update GTFS_Routes
 
-                        Utilities.LogEvent("BlobStorageEngine", "Uploading records for GTFS_Routes.");
+                        Utilities.LogEvent("BackgroundWorker", "Uploading records for GTFS_Routes.");
                         List<GTFS_Route> routes = new List<GTFS_Route>();
                         foreach (Route r in gtfsEngine.Routes)
                         {
@@ -183,7 +183,7 @@ namespace BlobStorageEngine
 
                         #region Update GTFS_Stops
 
-                        Utilities.LogEvent("BlobStorageEngine", "Uploading records for GTFS_Stops.");
+                        Utilities.LogEvent("BackgroundWorker", "Uploading records for GTFS_Stops.");
                         List<GTFS_Stop> stops = new List<GTFS_Stop>();
                         foreach (Stop s in gtfsEngine.Stops)
                         {
@@ -217,7 +217,7 @@ namespace BlobStorageEngine
 
                         #region Update GTFS_StopTimes
 
-                        Utilities.LogEvent("BlobStorageEngine", "Uploading records for GTFS_StopTimes.");
+                        Utilities.LogEvent("BackgroundWorker", "Uploading records for GTFS_StopTimes.");
                         List<GTFS_StopTime> stopTimes = new List<GTFS_StopTime>();
                         foreach (StopTime t in gtfsEngine.Stop_Times)
                         {
@@ -251,7 +251,7 @@ namespace BlobStorageEngine
 
                         #region Update GTFS_Trips
 
-                        Utilities.LogEvent("BlobStorageEngine", "Uploading records for GTFS_Trips.");
+                        Utilities.LogEvent("BackgroundWorker", "Uploading records for GTFS_Trips.");
                         List<GTFS_Trip> trips = new List<GTFS_Trip>();
                         foreach (Trip t in gtfsEngine.Trips)
                         {
@@ -286,11 +286,11 @@ namespace BlobStorageEngine
                         foreach (Stream s in streamData.Values)
                             s.Dispose();
 
-                        Utilities.LogEvent("BlobStorageEngine", "Complete.");
+                        Utilities.LogEvent("BackgroundWorker", "Complete.");
                     }
                     catch (Exception ex)
                     {
-                        Utilities.LogEvent("BlobStorageEngine", "An unhandled exception has occurred. Message: " + ex.Message + "; " +
+                        Utilities.LogEvent("BackgroundWorker", "An unhandled exception has occurred. Message: " + ex.Message + "; " +
                                                                                                      "Source: " + ex.Source + "; " +
                                                                                                      "TargetSite: " + ex.TargetSite + "; " +
                                                                                                      "StackTrace: " + ex.StackTrace + ";");
@@ -299,7 +299,7 @@ namespace BlobStorageEngine
                     }
                 }
 
-                Utilities.LogEvent("BlobStorageEngine", "Going to sleep.");
+                Utilities.LogEvent("BackgroundWorker", "Going to sleep.");
 
                 Thread.Sleep(1000 * 60 * 60 * 24 * 7);
             }
@@ -309,7 +309,7 @@ namespace BlobStorageEngine
         {
             RoleEnvironment.Changing += RoleEnvironment_Changing;
 
-            Utilities.LogEvent("BlobStorageEngine", "Ready.");
+            Utilities.LogEvent("BackgroundWorker", "Ready.");
 
             return base.OnStart();
         }
