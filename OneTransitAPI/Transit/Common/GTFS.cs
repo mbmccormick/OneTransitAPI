@@ -108,6 +108,8 @@ namespace OneTransitAPI.Transit.Common
             var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
             var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
 
+            now = now.AddHours(1);
+
             var tod0 = now.DateTime;
             var tod1 = now.AddHours(2).DateTime;
 
