@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="OneTransitAPI" Class="DatabaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=ick5mba97o.database.windows.net;Initial Catalog=OneTransitAPI;Persist Security Info=True;User ID=mbmccormick" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="OneTransitAPIConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=ick5mba97o.database.windows.net;Initial Catalog=OneTransitAPI;Persist Security Info=True;User ID=mccormick_tech" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="OneTransitAPIConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Consumers" Member="Consumers">
     <Type Name="Consumer">
       <Column Name="ConsumerKey" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -48,7 +48,7 @@
       <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="LongName" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="ShortName" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
   <Table Name="dbo.GTFS_Stops" Member="GTFS_Stops">
@@ -68,8 +68,8 @@
       <Column Name="PartitionKey" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
       <Column Name="StopID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="TripID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="ArrivalTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="DepartureTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ArrivalTime" Type="System.DateTime" DbType="SmallDateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DepartureTime" Type="System.DateTime" DbType="SmallDateTime NOT NULL" CanBeNull="false" />
       <Column Name="StopSequence" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>

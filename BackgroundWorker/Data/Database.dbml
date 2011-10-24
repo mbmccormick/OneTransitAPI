@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="OneTransitAPI" Class="DatabaseDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=ick5mba97o.database.windows.net;Initial Catalog=OneTransitAPI;Persist Security Info=True;User ID=mbmccormick" SettingsObjectName="BackgroundWorker.Properties.Settings" SettingsPropertyName="OneTransitAPIConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=ick5mba97o.database.windows.net;Initial Catalog=OneTransitAPI;Persist Security Info=True;User ID=mccormick_tech" SettingsObjectName="BackgroundWorker.Properties.Settings" SettingsPropertyName="OneTransitAPIConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.GTFS_Agency" Member="GTFS_Agencies">
     <Type Name="GTFS_Agency">
       <Column Name="RowKey" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -43,18 +43,7 @@
       <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="LongName" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="ShortName" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
-  <Table Name="dbo.GTFS_StopTimes" Member="GTFS_StopTimes">
-    <Type Name="GTFS_StopTime">
-      <Column Name="RowKey" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="PartitionKey" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
-      <Column Name="StopID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="TripID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="ArrivalTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="DepartureTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="StopSequence" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="TinyInt NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
   <Table Name="dbo.GTFS_Stops" Member="GTFS_Stops">
@@ -66,6 +55,17 @@
       <Column Name="Code" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="Latitude" Type="System.Decimal" DbType="Decimal(18,15) NOT NULL" CanBeNull="false" />
       <Column Name="Longitude" Type="System.Decimal" DbType="Decimal(18,15) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.GTFS_StopTimes" Member="GTFS_StopTimes">
+    <Type Name="GTFS_StopTime">
+      <Column Name="RowKey" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PartitionKey" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="StopID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TripID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ArrivalTime" Type="System.DateTime" DbType="SmallDateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DepartureTime" Type="System.DateTime" DbType="SmallDateTime NOT NULL" CanBeNull="false" />
+      <Column Name="StopSequence" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
   <Function Name="dbo.InsertCalendars" Method="InsertCalendars">

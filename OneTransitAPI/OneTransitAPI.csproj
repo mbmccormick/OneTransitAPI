@@ -60,6 +60,7 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Logging.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="StyleSheet.css" />
     <Content Include="TransitService.svc" />
@@ -93,6 +94,13 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Logging.aspx.cs">
+      <DependentUpon>Logging.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Logging.aspx.designer.cs">
+      <DependentUpon>Logging.aspx</DependentUpon>
     </Compile>
     <Compile Include="Register.aspx.cs">
       <DependentUpon>Register.aspx</DependentUpon>
