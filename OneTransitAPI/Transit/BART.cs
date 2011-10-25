@@ -71,8 +71,6 @@ namespace OneTransitAPI.Transit
                         var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
                         var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
 
-                        now = now.AddHours(1);
-
                         if (s["minutes"].ToString() == "Arrived")
                             t.ArrivalTime = now.DateTime.ToString("hh:mm tt");
                         else

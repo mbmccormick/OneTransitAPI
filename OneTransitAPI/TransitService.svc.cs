@@ -118,6 +118,9 @@ namespace OneTransitAPI
                 case "cta":
                     webService = new CTA(agency);
                     break;
+                case "mta":
+                    webService = new MTA(agency);
+                    break;
                 case "seattle":
                     webService = new Seattle(agency);
                     break;

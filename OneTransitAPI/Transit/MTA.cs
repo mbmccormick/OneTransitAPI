@@ -12,12 +12,13 @@ using Stancer.GTFSEngine;
 
 namespace OneTransitAPI.Transit.Common
 {
-    public class GTFS : IWebService
+    public class MTA : IWebService
     {
         private DatabaseDataContext db;
         private GTFS_Agency agency;
 
-        public GTFS(Agency transitAgency) : base(transitAgency)
+        public MTA(Agency transitAgency)
+            : base(transitAgency)
         {
             db = new DatabaseDataContext();
 
@@ -107,6 +108,9 @@ namespace OneTransitAPI.Transit.Common
 
             var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
             var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
+
+            // adjusted for MTA only
+            now = new DateTimeOffset(now.Year, 12, 15, now.Hour, now.Minute, now.Second, now.Offset);
 
             var tod0 = now.DateTime;
             var tod1 = now.AddHours(2).DateTime;
