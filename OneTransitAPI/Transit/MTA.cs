@@ -106,14 +106,13 @@ namespace OneTransitAPI.Transit.Common
         {
             List<StopTime> result = new List<StopTime>();
 
-            var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
-            var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
+            var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, this.TransitAgency.FriendlyTimeZone);
 
             // adjusted for MTA only
-            now = new DateTimeOffset(now.Year, 12, 15, now.Hour, now.Minute, now.Second, now.Offset);
+            now = new DateTime(now.Year, 12, 15, now.Hour, now.Minute, now.Second);
 
-            var tod0 = now.DateTime;
-            var tod1 = now.AddHours(2).DateTime;
+            var tod0 = now;
+            var tod1 = now.AddHours(2);
 
             var stopTimes = db.GetStopTimes(tod0, tod1, agency.PartitionKey, stopid);
 

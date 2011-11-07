@@ -89,9 +89,6 @@ namespace OneTransitAPI.Transit
                     t.Type = "scheduled";
                 }
 
-                var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
-                var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
-                         
                 if ((from x in result where x.RouteShortName == t.RouteShortName select x).Count() < 2)
                     result.Add(t);
             }

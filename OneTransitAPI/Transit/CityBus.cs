@@ -71,15 +71,12 @@ namespace OneTransitAPI.Transit
                 t.RouteShortName = r["RouteName"].ToString().Substring(0, r["RouteName"].ToString().IndexOf(" ")).ToUpper().Trim(); if (t.RouteShortName.Length > 3) t.RouteShortName = t.RouteShortName.Substring(0, 3);
                 t.RouteLongName = r["RouteName"].ToString().Replace(t.RouteShortName, "").Trim();
 
-                var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
-                var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
+                var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, this.TransitAgency.FriendlyTimeZone);
 
-                now = now.AddHours(1);
-                                
                 if (r["TimeTillArrival"].ToString() == "DUE")
-                    t.ArrivalTime = now.DateTime.ToString("hh:mm tt");
+                    t.ArrivalTime = now.ToString("hh:mm tt");
                 else
-                    t.ArrivalTime = now.AddMinutes(Convert.ToInt32(r["TimeTillArrival"].ToString().Replace("min", "").Trim())).DateTime.ToString("hh:mm tt");
+                    t.ArrivalTime = now.AddMinutes(Convert.ToInt32(r["TimeTillArrival"].ToString().Replace("min", "").Trim())).ToString("hh:mm tt");
                 
                 t.DepartureTime = t.ArrivalTime;
                 t.Type = "realtime";

@@ -68,13 +68,12 @@ namespace OneTransitAPI.Transit
                         t.RouteShortName = r["abbreviation"].ToString();
                         t.RouteLongName = r["destination"].ToString();
 
-                        var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
-                        var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
+                        var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, this.TransitAgency.FriendlyTimeZone);
 
                         if (s["minutes"].ToString() == "Arrived")
-                            t.ArrivalTime = now.DateTime.ToString("hh:mm tt");
+                            t.ArrivalTime = now.ToString("hh:mm tt");
                         else
-                            t.ArrivalTime = now.AddMinutes(Convert.ToInt32(s["minutes"].ToString().Trim())).DateTime.ToString("hh:mm tt");
+                            t.ArrivalTime = now.AddMinutes(Convert.ToInt32(s["minutes"].ToString().Trim())).ToString("hh:mm tt");
                         
                         t.DepartureTime = t.ArrivalTime;
                         t.Type = "realtime";

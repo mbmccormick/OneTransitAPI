@@ -105,11 +105,10 @@ namespace OneTransitAPI.Transit.Common
         {
             List<StopTime> result = new List<StopTime>();
 
-            var utc = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
-            var now = utc.ToOffset(this.TransitAgency.FriendlyTimeZone.GetUtcOffset(utc));
+            var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, this.TransitAgency.FriendlyTimeZone);
 
-            var tod0 = now.DateTime;
-            var tod1 = now.AddHours(2).DateTime;
+            var tod0 = now;
+            var tod1 = now.AddHours(2);
 
             var stopTimes = db.GetStopTimes(tod0, tod1, agency.PartitionKey, stopid);
 
