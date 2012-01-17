@@ -38,6 +38,7 @@ namespace OneTransitAPI
                 result.Add(a);
             }
 
+            WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin", "*");
             return result;
         }
 
@@ -48,6 +49,8 @@ namespace OneTransitAPI
             this.ValidateKey(key);
 
             IWebService webService = SelectWebService(agencyid);
+
+            WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin", "*");
             return webService.GetRoutes().OrderBy(r => r.ID).ToList<Route>();
         }
 
@@ -58,6 +61,8 @@ namespace OneTransitAPI
             this.ValidateKey(key);
 
             IWebService webService = SelectWebService(agencyid);
+
+            WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin", "*");
             return webService.GetStop(stopid);
         }
 
@@ -68,6 +73,8 @@ namespace OneTransitAPI
             this.ValidateKey(key);
 
             IWebService webService = SelectWebService(agencyid);
+
+            WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin", "*");
             return webService.GetStops().OrderBy(s => s.ID).ToList<Stop>();
         }
 
@@ -78,6 +85,8 @@ namespace OneTransitAPI
             this.ValidateKey(key);
 
             IWebService webService = SelectWebService(agencyid);
+
+            WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin", "*");
             return webService.GetStopsByLocation(latitude, longitude, radius).OrderBy(s => Utilities.Distance(s.Latitude, s.Longitude, latitude, longitude)).ToList<Stop>();
         }
 
@@ -88,6 +97,8 @@ namespace OneTransitAPI
             this.ValidateKey(key);
 
             IWebService webService = SelectWebService(agencyid);
+
+            WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin", "*");
             return webService.GetStopTimes(stopid).OrderBy(t => t.ArrivalTime).ToList<StopTime>();
         }
 
