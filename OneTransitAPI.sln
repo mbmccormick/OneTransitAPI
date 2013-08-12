@@ -1,9 +1,12 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneTransitAPI", "OneTransitAPI\OneTransitAPI.csproj", "{D0525C60-B141-4DD3-8485-F7FC3DD80133}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E3B62AD1-8FB9-4930-A9BE-ED4A71E68045} = {E3B62AD1-8FB9-4930-A9BE-ED4A71E68045}
+	EndProjectSection
 EndProject
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "WindowsAzure", "WindowsAzure\WindowsAzure.ccproj", "{C3DED91E-DD53-48A5-B9A4-527EC013BFC0}"
+Project("{74186AD4-42E2-398E-90D9-104FA35C0E97}") = "WindowsAzure", "WindowsAzure\WindowsAzure.ccproj", "{C3DED91E-DD53-48A5-B9A4-527EC013BFC0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTFSEngine", "GTFSEngine\GTFSEngine.csproj", "{E3B62AD1-8FB9-4930-A9BE-ED4A71E68045}"
 EndProject
